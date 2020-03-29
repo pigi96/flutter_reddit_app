@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1050664950260",
+    "firebase_url": "https://redditapp-e5ee7.firebaseio.com",
+    "project_id": "redditapp-e5ee7",
+    "storage_bucket": "redditapp-e5ee7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050664950260:android:ac1227b188f865b6ce81a1",
+        "android_client_info": {
+          "package_name": "si.olvins.redditapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050664950260-b3u5shlc4d8m4nk5dr1b18g1ikmvla2l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "si.olvins.redditapp",
+            "certificate_hash": "e13604aeadc7e735ad4c59da11821579e4cccdfd"
+          }
+        },
+        {
+          "client_id": "1050664950260-pp2cpl73hgdbcusplg5ura0grus8uo77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQw4mLGMVjRtHd8Ul82g7VkElVlwTrmPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050664950260-pp2cpl73hgdbcusplg5ura0grus8uo77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
