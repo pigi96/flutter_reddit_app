@@ -53,7 +53,11 @@ class RedditAPI {
     @required StorageRepository storageRepository,
     @required String code,
   }) async {
-    await reddit.auth.authorize(code);
+    try {
+      await reddit.auth.authorize(code);
+    } catch (error) {
+      return false;
+    }
 
     // Write credentials to disk.
     await storageRepository.saveCredentials(reddit.auth.credentials.toJson());

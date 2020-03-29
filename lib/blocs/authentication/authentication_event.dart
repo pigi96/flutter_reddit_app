@@ -19,3 +19,4 @@ class AuthenticateUser extends AuthenticationEvent {
 }
 class StartAuthentication extends AuthenticationEvent {}
 class StopAuthentication extends AuthenticationEvent {}
+class NavigationComplete extends AuthenticationEvent {}

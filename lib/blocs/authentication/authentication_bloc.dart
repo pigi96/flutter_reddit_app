@@ -40,12 +40,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapAuthenticateUserToState(AuthenticateUser event) async* {
     yield LoadingAuthentication();
 
-    await _redditRepository.authenticateUser(
+    bool authenticated = await _redditRepository.authenticateUser(
       storageRepository: _storageRepository,
       code: event.code,
     );
 
-    yield Authenticated();
+    yield authenticated ? Authenticated():
+                          NotAuthenticated();
   }
 
   Stream<AuthenticationState> _mapStartAuthenticationToState() async* {
