@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/blocs/bloc_authentication.dart';
+import 'package:redditapp/repositories/reddit_repositroy.dart';
+import 'package:redditapp/repositories/storage_repository.dart';
 import 'package:redditapp/storage/storage.dart';
 import 'package:redditapp/ui/fragments/home.dart';
 import 'package:redditapp/ui/pages/authentication_page.dart';
@@ -23,7 +25,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
-            create: (context) => AuthenticationBloc(),
+            create: (context) => AuthenticationBloc(
+              redditRepository: RedditRepository(),
+              storageRepository: StorageRepository(),
+            ),
         ),
         BlocProvider<NavigationBloc>(
           create: (context) => NavigationBloc(),

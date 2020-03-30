@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:redditapp/blocs/bloc_authentication.dart';
 import 'package:redditapp/blocs/navigation/bloc.dart';
 import 'package:redditapp/blocs/navigation/navigation_bloc.dart';
 import 'package:redditapp/blocs/navigation/navigation_state.dart';
-import 'package:redditapp/ui/fragments/home.dart';
 import 'package:redditapp/ui/widgets/error_widget.dart';
 import 'package:redditapp/ui/widgets/internal_web_widget.dart';
 import 'package:redditapp/ui/widgets/loading_widget.dart';
@@ -41,7 +38,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           return previous != current;
         },
         builder: (context, state) {
-
           if (state is Authenticated) {
             BlocProvider.of<NavigationBloc>(context).add(NavigateToHome());
             return LoadingWidget();

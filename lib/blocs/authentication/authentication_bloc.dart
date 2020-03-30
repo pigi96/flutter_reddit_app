@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/repositories/reddit_repositroy.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
@@ -7,8 +8,13 @@ import 'authentication_state.dart';
 
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  RedditRepository _redditRepository = RedditRepository();
-  StorageRepository _storageRepository = StorageRepository();
+  RedditRepository redditRepository;
+  StorageRepository storageRepository;
+
+  AuthenticationBloc({
+    @required this.redditRepository,
+    @required this.storageRepository,
+  });
 
   @override
   AuthenticationState get initialState => NotAuthenticated();
@@ -29,8 +35,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapRestoreAuthenticationToState() async* {
     yield LoadingAuthentication();
 
-    bool authenticated = await _redditRepository.restoreRedditAuthentication(
-      storageRepository: _storageRepository,
+    bool authenticated = await redditRepository.restoreRedditAuthentication(
+      storageRepository: storageRepository,
     );
 
     yield authenticated ? Authenticated():
@@ -40,8 +46,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> _mapAuthenticateUserToState(AuthenticateUser event) async* {
     yield LoadingAuthentication();
 
-    bool authenticated = await _redditRepository.authenticateUser(
-      storageRepository: _storageRepository,
+    bool authenticated = await redditRepository.authenticateUser(
+      storageRepository: storageRepository,
       code: event.code,
     );
 
@@ -51,7 +57,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   Stream<AuthenticationState> _mapStartAuthenticationToState() async* {
     yield StartedAuthentication(
-      url: _redditRepository.authenticationUrl().toString(),
+      url: redditRepository.authenticationUrl().toString(),
     );
   }
 
