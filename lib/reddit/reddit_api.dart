@@ -9,7 +9,7 @@ import 'package:redditapp/repositories/storage_repository.dart';
 /// provides access to a few methods available in [Reddit] class.
 class RedditAPI {
   // Only a single instance will exist since the above class is a singleton.
-  Reddit reddit;
+  Reddit _reddit;
 
   // Create and call constructor for the single instance that is shared across
   // application.
@@ -23,7 +23,7 @@ class RedditAPI {
   /// previous installed flow instance, otherwise create a new installed
   /// flow instance.
   ///
-  /// Return true if [reddit] is restored.
+  /// Return true if [_reddit] is restored.
   Future<bool> restoreRedditAuthentication({
     @required StorageRepository storageRepository,
   }) async {
@@ -31,21 +31,23 @@ class RedditAPI {
     String credentials = await storageRepository.loadCredentials();
 
     // Check if loaded credentials exist.
-    if (credentials != null) {
+    if (credentials.isNotEmpty) {
       // App has saved authentication data, restore instance
-      reddit = Reddit.restoreInstalledAuthenticatedInstance(credentials,
+
+      _reddit = Reddit.restoreInstalledAuthenticatedInstance(credentials,
           userAgent: Config.identifier,
           clientId: Config.clientId,
           redirectUri: Uri.parse(Config.redirectUri));
+
       return true;
-    } else {
-      // App has no data, create a new instance
-      reddit = Reddit.createInstalledFlowInstance(
-          userAgent: Config.identifier,
-          clientId: Config.clientId,
-          redirectUri: Uri.parse(Config.redirectUri));
-      return false;
     }
+
+    // App has no data, create a new instance
+    _reddit = Reddit.createInstalledFlowInstance(
+        userAgent: Config.identifier,
+        clientId: Config.clientId,
+        redirectUri: Uri.parse(Config.redirectUri));
+    return false;
   }
 
   /// Return true if user with secret [code] was successfully authenticated.
@@ -54,24 +56,32 @@ class RedditAPI {
     @required String code,
   }) async {
     try {
-      await reddit.auth.authorize(code);
+      await _reddit.auth.authorize(code);
+
     } catch (error) {
       return false;
     }
 
     // Write credentials to disk.
-    await storageRepository.saveCredentials(reddit.auth.credentials.toJson());
+    await storageRepository.saveCredentials(_reddit.auth.credentials.toJson());
 
     return true;
   }
 
   /// Return [Uri] using already instantiated [reddit].
   Uri authenticationUrl() {
-    Uri url = reddit.auth.url(["identity"], Config.identifier);
+    Uri url = _reddit.auth.url([
+      "identity",
+      "read",
+    ], Config.identifier);
     return url;
   }
 
   Future<Redditor> redditor() async {
-    return reddit.user.me();
+    return _reddit.user.me();
+  }
+
+  Stream subreddit() {
+    return _reddit.subreddits.newest(limit: 100);
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/app_style/app_colors.dart';
-import 'package:redditapp/blocs/bloc_authentication.dart';
+import 'package:redditapp/blocs/authentication/bloc_authentication.dart';
 
 class SignIn extends StatefulWidget {
   @override

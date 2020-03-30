@@ -22,10 +22,13 @@ class RedditRepository {
     );
   }
 
-
   Future<Redditor> redditor() =>
       RedditAPI.instance.redditor();
 
   Uri authenticationUrl() =>
       RedditAPI.instance.authenticationUrl();
+
+  Stream subreddits() {
+    return RedditAPI.instance.subreddit();
+  }
 }
