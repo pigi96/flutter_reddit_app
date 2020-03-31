@@ -27,19 +27,30 @@ class RedditRepository extends RedditRepositorySup {
   }
 
   @override
-  Future<Redditor> redditor() =>
-      RedditAPI.instance.redditor();
+  Future<Redditor> redditor() => RedditAPI.instance.redditor();
 
   @override
-  Uri authenticationUrl() =>
-      RedditAPI.instance.authenticationUrl();
+  Uri authenticationUrl() => RedditAPI.instance.authenticationUrl();
 
   @override
   Future<List<Subreddit>> subreddits({
-    @required SubredditOption option
+    @required SubredditOption option,
   }) {
-    return RedditAPI.instance.subreddit(
+    return RedditAPI.instance.subreddits(
       option: option,
     );
   }
+
+  @override
+  Future<List<Submission>> subredditsSubmissions({
+    String title,
+    SubmissionOption option,
+  }) {
+    return RedditAPI.instance.subredditsSubmissions(
+      subredditTitle: title,
+      option: option,
+    );
+  }
+
+
 }

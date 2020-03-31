@@ -82,10 +82,11 @@ class RedditAPI {
     return _reddit.user.me();
   }
 
-  /// Create a [Stream] that listens to data according to given [option] and
-  /// return a [List] of [Subreddit].
-  Future<List<Subreddit>> subreddit({
-    SubredditOption option,
+  /// Returns a [List] of [Subreddit].
+  ///
+  /// Create a [Stream] that listens to data according to given [option].
+  Future<List<Subreddit>> subreddits({
+    @required SubredditOption option,
   }) async {
     Stream stream;
     switch(option) {
@@ -93,7 +94,7 @@ class RedditAPI {
         stream = _reddit.subreddits.newest();
         break;
       case SubredditOption.popular:
-        stream = _reddit.subreddits.popular(limit: 10);
+        stream = _reddit.subreddits.popular();
         break;
       case SubredditOption.gold:
         stream = _reddit.subreddits.gold();
@@ -109,5 +110,39 @@ class RedditAPI {
     }
 
     return subreddits;
+  }
+
+  /// Returns a [List] of [Submission].
+  ///
+  /// Create a [Stream] that listens to data according to given [option] and
+  /// search for [subredditTitle] as it's reddit subreddit topic.
+  Future<List<Submission>> subredditsSubmissions({
+    @required String subredditTitle,
+    @required SubmissionOption option,
+  }) async {
+    Stream stream;
+    switch (option) {
+      case SubmissionOption.newest:
+        stream = _reddit.subreddit(subredditTitle).newest();
+        break;
+      case SubmissionOption.hot:
+        stream = _reddit.subreddit(subredditTitle).hot();
+        break;
+      case SubmissionOption.controversial:
+        stream = _reddit.subreddit(subredditTitle).controversial();
+        break;
+      case SubmissionOption.top:
+        stream = _reddit.subreddit(subredditTitle).top();
+        break;
+    }
+
+    List<Submission> submissions = List<Submission>();
+    await for (final value in stream) {
+      submissions.add(value);
+    }
+
+    print(submissions[0].preview[0].source.url);
+
+    return submissions;
   }
 }

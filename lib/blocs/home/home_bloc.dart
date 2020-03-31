@@ -39,7 +39,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     yield SubredditsLoaded(
       subreddits: subreddits,
     );
-
-    yield* _mapLoadSubredditsToState(SubredditOption.popular);
   }
 }
