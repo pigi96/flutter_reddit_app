@@ -141,8 +141,6 @@ class RedditAPI {
       submissions.add(value);
     }
 
-    print(submissions[0].preview[0].source.url);
-
     return submissions;
   }
 }
