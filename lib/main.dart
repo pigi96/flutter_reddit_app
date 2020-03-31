@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/blocs/authentication/bloc_authentication.dart';
-import 'package:redditapp/repositories/reddit_repositroy.dart';
+import 'package:redditapp/repositories/reddit_repository.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
 import 'package:redditapp/storage/storage.dart';
 import 'package:redditapp/ui/fragments/home.dart';
 import 'package:redditapp/ui/pages/authentication_page.dart';
+import 'package:redditapp/ui/pages/subreddit_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'blocs/home/home_bloc.dart';
+import 'blocs/home/home_event.dart';
 import 'blocs/navigation/navigation_bloc.dart';
 
 void main() async {
@@ -42,12 +44,18 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
+          "/subreddit": (context) {
+            return SubredditPage();
+          },
           "/authentication": (context) {
-            BlocProvider.of<AuthenticationBloc>(context).add(RestoreAuthentication());
+            BlocProvider.of<AuthenticationBloc>(context).add(
+                RestoreAuthentication());
             return AuthenticationPage();
           },
-          "/": (context) =>
-            Home(),
+          "/": (context) {
+            BlocProvider.of<HomeBloc>(context).add(LoadSubredditsPopular());
+            return Home();
+          },
         },
         initialRoute: "/authentication",
       ),

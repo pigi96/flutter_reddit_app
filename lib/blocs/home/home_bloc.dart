@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:redditapp/repositories/reddit_repositroy.dart';
+import 'package:redditapp/reddit/reddit.dart';
+import 'package:redditapp/repositories/reddit_repository.dart';
 import './bloc_home.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -19,23 +20,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(
     HomeEvent event,
   ) async* {
-    if (event is LoadSubreddits) {
-      yield* _mapLoadSubredditsToState();
+    if (event is LoadSubredditsPopular) {
+      yield* _mapLoadSubredditsToState(SubredditOption.popular);
+    } else if (event is LoadSubredditsNewest) {
+      yield* _mapLoadSubredditsToState(SubredditOption.newest);
+    } else if (event is LoadSubredditsGold) {
+      yield* _mapLoadSubredditsToState(SubredditOption.gold);
+    } else if (event is LoadSubredditsDefaults) {
+      yield* _mapLoadSubredditsToState(SubredditOption.defaults);
     }
   }
 
-  Stream<HomeState> _mapLoadSubredditsToState() async* {
-    var listener = redditRepository.subreddits();
-
-    List<Subreddit> subreddits = List<Subreddit>();
-    await for (final value in listener) {
-      // The `await .toList()` ensures the full list is ready
-      // before yielding on the Stream
-      subreddits.add(value);
-    }
+  Stream<HomeState> _mapLoadSubredditsToState(SubredditOption option) async* {
+    List<Subreddit> subreddits = await redditRepository.subreddits(
+      option: option,
+    );
 
     yield SubredditsLoaded(
       subreddits: subreddits,
     );
+
+    yield* _mapLoadSubredditsToState(SubredditOption.popular);
   }
 }

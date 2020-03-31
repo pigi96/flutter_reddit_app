@@ -2,6 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import "package:redditapp/config.dart";
 import 'package:redditapp/helpers/credentials.dart';
+import 'package:redditapp/reddit/reddit.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
 
 
@@ -81,7 +82,32 @@ class RedditAPI {
     return _reddit.user.me();
   }
 
-  Stream subreddit() {
-    return _reddit.subreddits.newest(limit: 100);
+  /// Create a [Stream] that listens to data according to given [option] and
+  /// return a [List] of [Subreddit].
+  Future<List<Subreddit>> subreddit({
+    SubredditOption option,
+  }) async {
+    Stream stream;
+    switch(option) {
+      case SubredditOption.newest:
+        stream = _reddit.subreddits.newest();
+        break;
+      case SubredditOption.popular:
+        stream = _reddit.subreddits.popular(limit: 10);
+        break;
+      case SubredditOption.gold:
+        stream = _reddit.subreddits.gold();
+        break;
+      default:
+        stream = _reddit.subreddits.defaults();
+        break;
+    }
+
+    List<Subreddit> subreddits = List<Subreddit>();
+    await for (final value in stream) {
+      subreddits.add(value);
+    }
+
+    return subreddits;
   }
 }

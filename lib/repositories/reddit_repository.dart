@@ -1,9 +1,12 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:redditapp/reddit/reddit.dart';
 import 'package:redditapp/reddit/reddit_api.dart';
+import 'package:redditapp/repositories/repositories/reddit_repository_sup.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
 
-class RedditRepository {
+class RedditRepository extends RedditRepositorySup {
+  @override
   Future<bool> authenticateUser({
     @required StorageRepository storageRepository,
     @required String code,
@@ -14,6 +17,7 @@ class RedditRepository {
     );
   }
 
+  @override
   Future<bool> restoreRedditAuthentication({
     @required StorageRepository storageRepository,
   }) {
@@ -22,13 +26,20 @@ class RedditRepository {
     );
   }
 
+  @override
   Future<Redditor> redditor() =>
       RedditAPI.instance.redditor();
 
+  @override
   Uri authenticationUrl() =>
       RedditAPI.instance.authenticationUrl();
 
-  Stream subreddits() {
-    return RedditAPI.instance.subreddit();
+  @override
+  Future<List<Subreddit>> subreddits({
+    @required SubredditOption option
+  }) {
+    return RedditAPI.instance.subreddit(
+      option: option,
+    );
   }
 }

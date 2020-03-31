@@ -30,7 +30,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       },
       listener: (context, state) {
         if (state is NavigateHome) {
-          Navigator.of(context).pushNamed('/');
+          Navigator.of(context).pushReplacementNamed('/');
         }
       },
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
