@@ -52,5 +52,14 @@ class RedditRepository extends RedditRepositorySup {
     );
   }
 
+  @override
+  Future<List<Subreddit>> usersSubscriptions({
+    @required SubscriptionOption option,
+  }) {
+    return RedditAPI.instance.usersSubscriptions(
+      option: option,
+    );
+  }
+
 
 }

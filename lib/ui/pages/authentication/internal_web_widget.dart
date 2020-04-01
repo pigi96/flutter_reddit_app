@@ -1,4 +1,4 @@
-import 'dart:async';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:redditapp/blocs/authentication/bloc_authentication.dart';
-import 'package:redditapp/blocs/blocs/user_profile_bloc.dart';
-import 'package:redditapp/blocs/events/user_profile_event.dart';
-import 'package:redditapp/reddit/reddit_api.dart';
 
-import '../../config.dart';
+import '../../../config.dart';
 
 class InternalWebView extends StatefulWidget {
   final String url;

@@ -2,13 +2,13 @@ import 'package:draw/draw.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-abstract class HomeState extends Equatable {
+abstract class BrowseState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class InitialHomeState extends HomeState {}
-class SubredditsLoaded extends HomeState {
+class InitialBrowseState extends BrowseState {}
+class SubredditsLoaded extends BrowseState {
   final List<Subreddit> subreddits;
 
   SubredditsLoaded({

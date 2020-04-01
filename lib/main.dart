@@ -1,17 +1,17 @@
-import 'package:draw/draw.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/blocs/authentication/bloc_authentication.dart';
 import 'package:redditapp/repositories/reddit_repository.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
 import 'package:redditapp/storage/storage.dart';
-import 'package:redditapp/ui/fragments/home.dart';
-import 'package:redditapp/ui/pages/authentication_page.dart';
-import 'package:redditapp/ui/pages/submission_page.dart';
+import 'package:redditapp/ui/pages/home.dart';
+import 'package:redditapp/ui/pages/authentication/authentication_page.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'blocs/home/home_bloc.dart';
-import 'blocs/home/home_event.dart';
+import 'blocs/browse/browse_bloc.dart';
+import 'blocs/browse/browse_event.dart';
 import 'blocs/navigation/navigation_bloc.dart';
 
 void main() async {
@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<HomeBloc>(
-            create: (context) => HomeBloc(
+          BlocProvider<BrowseBloc>(
+            create: (context) => BrowseBloc(
               redditRepository: RedditRepository(),
             ),
           ),
@@ -53,16 +53,13 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           routes: {
-            "/subreddit": (context) {
-              return SubmissionPage();
-            },
             "/authentication": (context) {
               BlocProvider.of<AuthenticationBloc>(context).add(
                   RestoreAuthentication());
               return AuthenticationPage();
             },
             "/": (context) {
-              BlocProvider.of<HomeBloc>(context).add(LoadSubredditsPopular());
+              BlocProvider.of<BrowseBloc>(context).add(GetPopularSubreddits());
               return Home();
             },
           },

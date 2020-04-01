@@ -4,34 +4,34 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redditapp/reddit/reddit.dart';
 import 'package:redditapp/repositories/reddit_repository.dart';
-import './bloc_submission.dart';
+import './bloc_submissions.dart';
 
-class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
+class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
   RedditRepository redditRepository;
 
-  SubmissionBloc({
+  SubmissionsBloc({
       @required this.redditRepository,
   });
 
   @override
-  SubmissionState get initialState => InitialSubmissionState();
+  SubmissionsState get initialState => InitialSubmissionsState();
 
   @override
-  Stream<SubmissionState> mapEventToState(
-    SubmissionEvent event,
+  Stream<SubmissionsState> mapEventToState(
+    SubmissionsEvent event,
   ) async* {
-    if (event is LoadSubmissionsHot) {
+    if (event is GetHotSubmissions) {
       yield* _mapLoadSubmissionsToState(event, SubmissionOption.hot);
-    } else if (event is LoadSubmissionsNewest) {
+    } else if (event is GetNewestSubmissions) {
       yield* _mapLoadSubmissionsToState(event, SubmissionOption.newest);
-    } else if (event is LoadSubmissionsControversial) {
+    } else if (event is GetControversialSubmissions) {
       yield* _mapLoadSubmissionsToState(event, SubmissionOption.controversial);
-    } else if (event is LoadSubmissionsTop) {
+    } else if (event is GetTopSubmissions) {
       yield* _mapLoadSubmissionsToState(event, SubmissionOption.top);
     }
   }
 
-  Stream<SubmissionState> _mapLoadSubmissionsToState(SubmissionEvent event, SubmissionOption option) async* {
+  Stream<SubmissionsState> _mapLoadSubmissionsToState(SubmissionsEvent event, SubmissionOption option) async* {
     List<Submission> submissions = await redditRepository.subredditsSubmissions(
       title: event.title,
       option: option,

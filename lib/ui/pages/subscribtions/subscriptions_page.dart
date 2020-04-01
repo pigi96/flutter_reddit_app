@@ -1,35 +1,48 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:redditapp/blocs/submission/bloc_submission.dart';
-import 'package:redditapp/repositories/reddit_repository.dart';
+import 'package:redditapp/blocs/subscriptions/bloc_subscriptions.dart';
 
-class SubmissionPage extends StatefulWidget {
+class SubscriptionsPage extends StatefulWidget {
+  final SubscriptionsEvent dataEvent;
+
+  SubscriptionsPage({
+    @required this.dataEvent,
+  });
+
   @override
-  _SubmissionPageState createState() => _SubmissionPageState();
+  _SubscriptionsPageState createState() => _SubscriptionsPageState();
 }
 
-class _SubmissionPageState extends State<SubmissionPage> {
+class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
-    final String title = ModalRoute.of(context).settings.arguments;
-    
-    return BlocProvider<SubmissionBloc>(
-      create: (BuildContext context) => SubmissionBloc(
+    return Container(
+      color: Colors.red,
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/*return BlocProvider<SubscriptionsBloc>(
+      create: (BuildContext context) => SubscriptionsBloc(
         redditRepository: RepositoryProvider.of<RedditRepository>(context),
-      )..add(LoadSubmissionsTop(
-        title: title,
-      )),
+      )..add(GetDefaultSubscriptions(),),
       child: Container(
-        child: BlocBuilder<SubmissionBloc, SubmissionState>(
-          builder: (context, submissions) {
-            if (submissions is SubmissionsLoaded) {
+        child: BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
+          builder: (context, subscriptions) {
+            if (subscriptions is DefaultSubscriptions) {
               return GridView.count(
                 key: PageStorageKey("subreddit_page"),
                 crossAxisCount: 1,
-                children: List.generate(submissions.submissions.length, (index) {
+                children: List.generate(subscriptions.subreddits.length, (index) {
                   return GestureDetector(
                     child: Card(
                       margin: new EdgeInsets.only(
@@ -41,14 +54,13 @@ class _SubmissionPageState extends State<SubmissionPage> {
                       elevation: 4.0,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: BlocBuilder<SubmissionBloc, SubmissionState>(
-                          builder: (context, submissions) {
-                            if (submissions is SubmissionsLoaded &&
-                            submissions.submissions[index].preview.isNotEmpty) {
+                        child: BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
+                          builder: (context, subscriptions) {
+                            if (subscriptions is DefaultSubscriptions) {
                               return Column(
                                 children: <Widget>[
                                   AutoSizeText(
-                                    submissions.submissions[index].title,
+                                    subscriptions.subreddits[index].title,
                                     style: TextStyle(
                                       fontSize: 20.0,
                                     ),
@@ -56,16 +68,16 @@ class _SubmissionPageState extends State<SubmissionPage> {
                                     textAlign: TextAlign.center,
                                   ),
                                   Image.network(
-                                    submissions.submissions[index].preview[0].source.url.toString(),
+                                    subscriptions.subreddits[index].title,
                                     fit: BoxFit.fill,
                                   ),
                                 ],
                               );
-                            } else if (submissions is SubmissionsLoaded) {
+                            } else if (subscriptions is DefaultSubscriptions) {
                               return Column(
                                 children: <Widget>[
                                   AutoSizeText(
-                                    submissions.submissions[index].title,
+                                    subscriptions.subreddits[index].title,
                                     style: TextStyle(
                                       fontSize: 20.0,
                                     ),
@@ -88,6 +100,4 @@ class _SubmissionPageState extends State<SubmissionPage> {
           },
         ),
       ),
-    );
-  }
-}
+    );*/

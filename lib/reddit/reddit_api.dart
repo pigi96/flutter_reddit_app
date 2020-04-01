@@ -1,7 +1,6 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import "package:redditapp/config.dart";
-import 'package:redditapp/helpers/credentials.dart';
 import 'package:redditapp/reddit/reddit.dart';
 import 'package:redditapp/repositories/storage_repository.dart';
 
@@ -142,5 +141,33 @@ class RedditAPI {
     }
 
     return submissions;
+  }
+
+  /// Returns a [List] of [Subreddit] user is subscribed to.
+  ///
+  /// Create a [Stream] that listens to data according to given [option] and
+  /// search for currently authorized user's [List] of subscribed [Subreddit].
+  Future<List<Subreddit>> usersSubscriptions({
+    @required SubscriptionOption option,
+  }) async {
+    Stream stream;
+    switch (option) {
+      case SubscriptionOption.defaults:
+        stream = _reddit.user.subreddits();
+        break;
+      case SubscriptionOption.contributor:
+        stream = _reddit.user.contributorSubreddits();
+        break;
+      case SubscriptionOption.moderator:
+        stream = _reddit.user.moderatorSubreddits();
+        break;
+    }
+
+    List<Subreddit> subreddits = List<Subreddit>();
+    await for(final value in stream) {
+      subreddits.add(value);
+    }
+
+    return subreddits;
   }
 }

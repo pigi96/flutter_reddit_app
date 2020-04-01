@@ -26,4 +26,8 @@ abstract class RedditRepositorySup {
     @required String title,
     @required SubmissionOption option,
   });
+
+  Future<List<Subreddit>> usersSubscriptions({
+    @required SubscriptionOption option,
+  });
 }

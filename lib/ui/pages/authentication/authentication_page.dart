@@ -6,9 +6,9 @@ import 'package:redditapp/blocs/navigation/bloc_navigation.dart';
 import 'package:redditapp/blocs/navigation/navigation_bloc.dart';
 import 'package:redditapp/blocs/navigation/navigation_state.dart';
 import 'package:redditapp/ui/widgets/error_widget.dart';
-import 'package:redditapp/ui/widgets/internal_web_widget.dart';
+import 'package:redditapp/ui/pages/authentication/internal_web_widget.dart';
 import 'package:redditapp/ui/widgets/loading_widget.dart';
-import 'package:redditapp/ui/widgets/sign_in_widget.dart';
+import 'package:redditapp/ui/pages/authentication/sign_in_widget.dart';
 
 class AuthenticationPage extends StatefulWidget {
   @override
