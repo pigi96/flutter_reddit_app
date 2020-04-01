@@ -23,9 +23,17 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
 
     _pages.add(
       widget: SubscriptionsPageController(),
+      bottomNavigationBarItem: BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        title: Text('Home'),
+      ),
     );
     _pages.add(
       widget: BrowsePageController(),
+      bottomNavigationBarItem: BottomNavigationBarItem(
+        icon: Icon(Icons.business),
+        title: Text('Business'),
+      ),
     );
   }
 
@@ -40,20 +48,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
     return Scaffold(
       body: _pages.widgets[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            title: Text('Business'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            title: Text('School'),
-          ),
-        ],
+        items: _pages.bottomNavigationBarItems,
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
