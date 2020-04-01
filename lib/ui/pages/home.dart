@@ -14,13 +14,24 @@ class Home extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateMixin {
   Pages _pages;
+  PageController _pageController;
   int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _pages = new Pages();
+    _pageController = PageController(
+      initialPage: 0,
+    );
 
+    _pages.add(
+      widget: BrowsePageController(),
+      bottomNavigationBarItem: BottomNavigationBarItem(
+        icon: Icon(Icons.business),
+        title: Text('Business'),
+      ),
+    );
     _pages.add(
       widget: SubscriptionsPageController(),
       bottomNavigationBarItem: BottomNavigationBarItem(
@@ -40,13 +51,20 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(index,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.decelerate,
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages.widgets[_selectedIndex],
+      body: PageView(
+        controller: _pageController,
+        children: _pages.widgets,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: _pages.bottomNavigationBarItems,
         currentIndex: _selectedIndex,
@@ -59,5 +77,6 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
   @override
   void dispose() {
     super.dispose();
+    _pageController.dispose();
   }
 }
