@@ -36,11 +36,6 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<BrowseBloc>(
-            create: (context) => BrowseBloc(
-              redditRepository: RedditRepository(),
-            ),
-          ),
           BlocProvider<NavigationBloc>(
             create: (context) => NavigationBloc(),
           ),
@@ -59,7 +54,6 @@ class MyApp extends StatelessWidget {
               return AuthenticationPage();
             },
             "/": (context) {
-              BlocProvider.of<BrowseBloc>(context).add(GetPopularSubreddits());
               return Home();
             },
           },

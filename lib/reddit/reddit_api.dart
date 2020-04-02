@@ -85,17 +85,18 @@ class RedditAPI {
   ///
   /// Create a [Stream] that listens to data according to given [option].
   Future<List<Subreddit>> subreddits({
-    @required SubredditOption option,
+    @required BrowseOption option,
   }) async {
+    print("CALLED");
     Stream stream;
     switch(option) {
-      case SubredditOption.newest:
+      case BrowseOption.newest:
         stream = _reddit.subreddits.newest();
         break;
-      case SubredditOption.popular:
+      case BrowseOption.popular:
         stream = _reddit.subreddits.popular();
         break;
-      case SubredditOption.gold:
+      case BrowseOption.gold:
         stream = _reddit.subreddits.gold();
         break;
       default:
@@ -164,6 +165,7 @@ class RedditAPI {
     }
 
     List<Subreddit> subreddits = List<Subreddit>();
+    print(stream.runtimeType);
     await for(final value in stream) {
       subreddits.add(value);
     }

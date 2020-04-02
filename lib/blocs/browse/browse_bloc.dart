@@ -6,7 +6,7 @@ import 'package:redditapp/reddit/reddit.dart';
 import 'package:redditapp/repositories/reddit_repository.dart';
 import './bloc_browse.dart';
 
-class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
+abstract class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
   RedditRepository redditRepository;
 
   BrowseBloc({
@@ -21,23 +21,55 @@ class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
     BrowseEvent event,
   ) async* {
     if (event is GetPopularSubreddits) {
-      yield* _mapLoadSubredditsToState(SubredditOption.popular);
+      yield* _mapSubredditsToState(BrowseOption.popular);
     } else if (event is GetNewestSubreddits) {
-      yield* _mapLoadSubredditsToState(SubredditOption.newest);
-    } else if (event is GetGoldSubreddits) {
-      yield* _mapLoadSubredditsToState(SubredditOption.gold);
+      yield* _mapSubredditsToState(BrowseOption.newest);
     } else if (event is GetDefaultsSubreddits) {
-      yield* _mapLoadSubredditsToState(SubredditOption.defaults);
+      yield* _mapSubredditsToState(BrowseOption.defaults);
+    } else if (event is GetGoldSubreddits) {
+      yield* _mapSubredditsToState(BrowseOption.gold);
     }
   }
 
-  Stream<BrowseState> _mapLoadSubredditsToState(SubredditOption option) async* {
+  Stream<BrowseState> _mapSubredditsToState(BrowseOption option) async* {
     List<Subreddit> subreddits = await redditRepository.subreddits(
       option: option,
     );
 
-    yield SubredditsLoaded(
+    yield Subreddits(
       subreddits: subreddits,
     );
   }
+}
+
+class BrowsePopularBloc extends BrowseBloc {
+  BrowsePopularBloc({
+    redditRepository,
+  }) : super(
+          redditRepository: redditRepository,
+        );
+}
+
+class BrowseNewestBloc extends BrowseBloc {
+  BrowseNewestBloc({
+    redditRepository,
+  }) : super(
+          redditRepository: redditRepository,
+        );
+}
+
+class BrowseGoldBloc extends BrowseBloc {
+  BrowseGoldBloc({
+    redditRepository,
+  }) : super(
+          redditRepository: redditRepository,
+        );
+}
+
+class BrowseDefaultsBloc extends BrowseBloc {
+  BrowseDefaultsBloc({
+    redditRepository,
+  }) : super(
+          redditRepository: redditRepository,
+        );
 }

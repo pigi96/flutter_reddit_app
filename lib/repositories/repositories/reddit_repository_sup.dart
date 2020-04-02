@@ -19,7 +19,7 @@ abstract class RedditRepositorySup {
   Uri authenticationUrl();
 
   Future<List<Subreddit>> subreddits({
-    @required SubredditOption option,
+    @required BrowseOption option,
   });
 
   Future<List<Submission>> subredditsSubmissions({

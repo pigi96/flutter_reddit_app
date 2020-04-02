@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/blocs/subscriptions/bloc_subscriptions.dart';
+import 'package:redditapp/repositories/reddit_repository.dart';
 import 'package:redditapp/ui/pages/helpers/page_helper.dart';
 import 'package:redditapp/ui/pages/subscribtions/subscriptions_page.dart';
 
@@ -59,8 +61,13 @@ class _SubscriptionsPageControllerState extends State<SubscriptionsPageControlle
             ],
           ),
         ),
-        body: TabBarView(
-          children: _pages.widgets,
+        body: BlocProvider<SubscriptionsBloc>(
+          create: (context) => SubscriptionsBloc(
+            redditRepository: RepositoryProvider.of<RedditRepository>(context),
+          ),
+          child: TabBarView(
+            children: _pages.widgets,
+          ),
         ),
       ),
     );

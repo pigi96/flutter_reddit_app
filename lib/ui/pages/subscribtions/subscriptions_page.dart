@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/blocs/subscriptions/bloc_subscriptions.dart';
+import 'package:redditapp/ui/widgets/loading_widget.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   final SubscriptionsEvent dataEvent;
@@ -16,8 +18,25 @@ class SubscriptionsPage extends StatefulWidget {
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
+    BlocProvider.of<SubscriptionsBloc>(context).add(widget.dataEvent);
+
+    return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
+      builder: (context, subscriptions) {
+        if (subscriptions is InitialSubscriptionsState) {
+          return LoadingWidget();
+        } else {
+          return GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(subscriptions.subreddits.length, (index) {
+              return GestureDetector(
+                child: Card(
+                  child: Text(subscriptions.subreddits[index].title),
+                ),
+              );
+            }),
+          );
+        }
+      }
     );
   }
 }

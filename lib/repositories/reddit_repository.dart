@@ -34,7 +34,7 @@ class RedditRepository extends RedditRepositorySup {
 
   @override
   Future<List<Subreddit>> subreddits({
-    @required SubredditOption option,
+    @required BrowseOption option,
   }) {
     return RedditAPI.instance.subreddits(
       option: option,

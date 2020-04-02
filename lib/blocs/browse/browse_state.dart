@@ -1,20 +1,25 @@
 import 'package:draw/draw.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:redditapp/reddit/reddit.dart';
 
 abstract class BrowseState extends Equatable {
-  @override
-  List<Object> get props => [];
-}
-
-class InitialBrowseState extends BrowseState {}
-class SubredditsLoaded extends BrowseState {
   final List<Subreddit> subreddits;
 
-  SubredditsLoaded({
-      @required this.subreddits,
+  BrowseState({
+    @required this.subreddits,
   });
 
   @override
   List<Object> get props => [subreddits];
+}
+
+class InitialBrowseState extends BrowseState {}
+
+class Subreddits extends BrowseState {
+  Subreddits({
+    subreddits,
+  }) : super(
+          subreddits: subreddits,
+        );
 }

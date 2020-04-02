@@ -44,7 +44,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       option: SubscriptionOption.contributor,
     );
 
-    yield DefaultSubscriptions(
+    yield ContributorSubscriptions(
       subreddits: subreddits,
     );
   }
@@ -54,7 +54,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       option: SubscriptionOption.moderator,
     );
 
-    yield DefaultSubscriptions(
+    yield ModeratorSubscriptions(
       subreddits: subreddits,
     );
   }
