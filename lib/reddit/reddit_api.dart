@@ -87,20 +87,19 @@ class RedditAPI {
   Future<List<Subreddit>> subreddits({
     @required BrowseOption option,
   }) async {
-    print("CALLED");
     Stream stream;
     switch(option) {
       case BrowseOption.newest:
-        stream = _reddit.subreddits.newest(limit: 30);
+        stream = _reddit.subreddits.newest(limit: 99);
         break;
       case BrowseOption.popular:
-        stream = _reddit.subreddits.popular(limit: 30);
+        stream = _reddit.subreddits.popular(limit: 99);
         break;
       case BrowseOption.gold:
-        stream = _reddit.subreddits.gold(limit: 30);
+        stream = _reddit.subreddits.gold(limit: 99);
         break;
       default:
-        stream = _reddit.subreddits.defaults(limit: 30);
+        stream = _reddit.subreddits.defaults(limit: 99);
         break;
     }
 
@@ -108,6 +107,7 @@ class RedditAPI {
     await for (final value in stream) {
       subreddits.add(value);
     }
+    print("PATH: ${subreddits[1].displayName}");
 
     return subreddits;
   }
@@ -119,29 +119,36 @@ class RedditAPI {
   Future<List<Submission>> subredditsSubmissions({
     @required String subredditTitle,
     @required SubmissionOption option,
+    @required var group,
   }) async {
+    print(subredditTitle);
     Stream stream;
     switch (option) {
       case SubmissionOption.newest:
         stream = _reddit.subreddit(subredditTitle).newest(limit: 30);
         break;
       case SubmissionOption.hot:
-        stream = _reddit.subreddit(subredditTitle).hot(limit: 30);
+        stream = _reddit.subreddit(subredditTitle).hot(
+          limit: 30,
+        );
         break;
       case SubmissionOption.controversial:
-        stream = _reddit.subreddit(subredditTitle).controversial(limit: 30);
+        stream = _reddit.subreddit(subredditTitle).controversial(
+          limit: 30,
+        );
         break;
       case SubmissionOption.top:
-        stream = _reddit.subreddit(subredditTitle).top(limit: 30);
+        stream = _reddit.subreddit(subredditTitle).top(
+          limit: 30,
+        );
         break;
     }
-
-    print(subredditTitle);
 
     List<Submission> submissions = List<Submission>();
     await for (final value in stream) {
       submissions.add(value);
     }
+    print(submissions[1]);
 
     return submissions;
   }
@@ -167,7 +174,6 @@ class RedditAPI {
     }
 
     List<Subreddit> subreddits = List<Subreddit>();
-    print(stream.runtimeType);
     await for(final value in stream) {
       subreddits.add(value);
     }

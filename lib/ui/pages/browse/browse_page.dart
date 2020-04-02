@@ -31,11 +31,7 @@ class _BrowsePageState extends State<BrowsePage> {
         children: List.generate(
           subreddits.length, (index) {
             return ExtendedCardWidget(
-              index: index+1,
-              title: subreddits[index].title,
-              subtitle: "Tap to see more",
-              info: subreddits[index].title,
-              imageUrl: subreddits[index].iconImage.toString(),
+              subreddit: widget.subredditsState.subreddits[index],
             );
           },
         ),

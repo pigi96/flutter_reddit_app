@@ -1,23 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:draw/draw.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:redditapp/blocs/browse/browse_state.dart';
 import 'package:redditapp/ui/pages/submissions/submissions_page_controller.dart';
 
 class ExtendedCardWidget extends StatefulWidget {
-  final int index;
-  final String title;
-  final String subtitle;
-  final String info;
-  final String imageUrl;
+  final Subreddit subreddit;
 
   ExtendedCardWidget({
-    @required this.index,
-    @required this.title,
-    @required this.info,
-    @required this.subtitle,
-    @required this.imageUrl,
+    @required this.subreddit,
   });
 
   @override
@@ -33,13 +27,13 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
         leading: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: CachedNetworkImage(
-            imageUrl: widget.imageUrl,
+            imageUrl: widget.subreddit.iconImage.toString(),
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),
-        title: Text(widget.title),
-        subtitle: Text(widget.subtitle),
+        title: Text(widget.subreddit.title),
+        subtitle: Text("Tap to load more"),
         children: <Widget>[
           Divider(
             thickness: 1.0,
@@ -52,7 +46,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 horizontal: 16.0,
                 vertical: 8.0,
               ),
-              child: Text(widget.info,
+              child: Text(widget.subreddit.title,
                 style: Theme.of(context)
                     .textTheme
                     .body1
@@ -85,7 +79,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 onPressed: () {
                   Route route = MaterialPageRoute(
                     builder: (context) => SubmissionsPageController(
-                      title: widget.title,
+                      subreddit: widget.subreddit,
                     ),
                   );
                   Navigator.push(context, route);

@@ -25,6 +25,7 @@ abstract class RedditRepositorySup {
   Future<List<Submission>> subredditsSubmissions({
     @required String title,
     @required SubmissionOption option,
+    @required var group,
   });
 
   Future<List<Subreddit>> usersSubscriptions({

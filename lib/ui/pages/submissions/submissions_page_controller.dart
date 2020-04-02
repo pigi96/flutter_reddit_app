@@ -1,3 +1,4 @@
+import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,10 +13,10 @@ import 'package:redditapp/ui/pages/submissions/submissions_page_hot.dart';
 
 
 class SubmissionsPageController extends StatefulWidget {
-  final String title;
+  final Subreddit subreddit;
 
   SubmissionsPageController({
-    @required this.title,
+    @required this.subreddit,
   });
 
   @override
@@ -32,7 +33,7 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
 
     _pages.add(
       widget: SubmissionsPageHot(
-        title: widget.title,
+        title: widget.subreddit.title,
       ),
       tab: Tab(
         text: "Hot",
@@ -40,7 +41,7 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
     );
     _pages.add(
       widget: SubmissionsPageHot(
-        title: widget.title,
+        title: widget.subreddit.title,
       ),
       tab: Tab(
         text: "New",
@@ -48,7 +49,7 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
     );
     _pages.add(
       widget: SubmissionsPageHot(
-        title: widget.title,
+        title: widget.subreddit.title,
       ),
       tab: Tab(
         text: "Top",
@@ -78,21 +79,21 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
               create: (context) => SubmissionsHotBloc(
                 redditRepository: RepositoryProvider.of<RedditRepository>(context),
               )..add(GetHotSubmissions(
-                title: widget.title,
+                title: widget.subreddit.displayName,
               )),
             ),
             BlocProvider<SubmissionsNewestBloc>(
               create: (context) => SubmissionsNewestBloc(
                 redditRepository: RepositoryProvider.of<RedditRepository>(context),
               )..add(GetNewestSubmissions(
-                title: widget.title,
+                title: widget.subreddit.fullname,
               )),
             ),
             BlocProvider<SubmissionsTopBloc>(
               create: (context) => SubmissionsTopBloc(
                 redditRepository: RepositoryProvider.of<RedditRepository>(context),
               )..add(GetTopSubmissions(
-                title: widget.title,
+                title: widget.subreddit.fullname,
               )),
             ),
           ],

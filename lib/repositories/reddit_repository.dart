@@ -43,12 +43,14 @@ class RedditRepository extends RedditRepositorySup {
 
   @override
   Future<List<Submission>> subredditsSubmissions({
-    String title,
-    SubmissionOption option,
+    @required String title,
+    @required SubmissionOption option,
+    @required var group,
   }) {
     return RedditAPI.instance.subredditsSubmissions(
       subredditTitle: title,
       option: option,
+      group: group,
     );
   }
 

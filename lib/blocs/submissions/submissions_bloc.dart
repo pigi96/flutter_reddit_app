@@ -9,6 +9,8 @@ import './bloc_submissions.dart';
 abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
   RedditRepository redditRepository;
 
+  var groupLoaded = 0;
+
   SubmissionsBloc({
       @required this.redditRepository,
   });
@@ -35,6 +37,7 @@ abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> 
     List<Submission> submissions = await redditRepository.subredditsSubmissions(
       title: event.title,
       option: option,
+      group: groupLoaded++,
     );
 
     yield Submissions(
