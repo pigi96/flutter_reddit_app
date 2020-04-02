@@ -28,22 +28,15 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
     _pages.add(
       widget: BrowsePageController(),
       bottomNavigationBarItem: BottomNavigationBarItem(
-        icon: Icon(Icons.business),
-        title: Text('Business'),
+        icon: Icon(Icons.subject),
+        title: Text('Browse'),
       ),
     );
     _pages.add(
       widget: SubscriptionsPageController(),
       bottomNavigationBarItem: BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        title: Text('Home'),
-      ),
-    );
-    _pages.add(
-      widget: BrowsePageController(),
-      bottomNavigationBarItem: BottomNavigationBarItem(
-        icon: Icon(Icons.business),
-        title: Text('Business'),
+        icon: Icon(Icons.subscriptions),
+        title: Text('Subs'),
       ),
     );
   }

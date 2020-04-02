@@ -31,7 +31,7 @@ class RedditAPI {
     String credentials = await storageRepository.loadCredentials();
 
     // Check if loaded credentials exist.
-    if (credentials.isNotEmpty) {
+    if (credentials != null && credentials.isNotEmpty) {
       // App has saved authentication data, restore instance
 
       _reddit = Reddit.restoreInstalledAuthenticatedInstance(credentials,
@@ -91,16 +91,16 @@ class RedditAPI {
     Stream stream;
     switch(option) {
       case BrowseOption.newest:
-        stream = _reddit.subreddits.newest();
+        stream = _reddit.subreddits.newest(limit: 30);
         break;
       case BrowseOption.popular:
-        stream = _reddit.subreddits.popular();
+        stream = _reddit.subreddits.popular(limit: 30);
         break;
       case BrowseOption.gold:
-        stream = _reddit.subreddits.gold();
+        stream = _reddit.subreddits.gold(limit: 30);
         break;
       default:
-        stream = _reddit.subreddits.defaults();
+        stream = _reddit.subreddits.defaults(limit: 30);
         break;
     }
 
@@ -123,18 +123,20 @@ class RedditAPI {
     Stream stream;
     switch (option) {
       case SubmissionOption.newest:
-        stream = _reddit.subreddit(subredditTitle).newest();
+        stream = _reddit.subreddit(subredditTitle).newest(limit: 30);
         break;
       case SubmissionOption.hot:
-        stream = _reddit.subreddit(subredditTitle).hot();
+        stream = _reddit.subreddit(subredditTitle).hot(limit: 30);
         break;
       case SubmissionOption.controversial:
-        stream = _reddit.subreddit(subredditTitle).controversial();
+        stream = _reddit.subreddit(subredditTitle).controversial(limit: 30);
         break;
       case SubmissionOption.top:
-        stream = _reddit.subreddit(subredditTitle).top();
+        stream = _reddit.subreddit(subredditTitle).top(limit: 30);
         break;
     }
+
+    print(subredditTitle);
 
     List<Submission> submissions = List<Submission>();
     await for (final value in stream) {

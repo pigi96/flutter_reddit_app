@@ -29,19 +29,19 @@ class _BrowsePageControllerState extends State<BrowsePageController> {
     _pages.add(
       widget: BrowsePagePopular(),
       tab: Tab(
-        icon: Icon(Icons.add),
+        text: "Popular",
       ),
     );
     _pages.add(
       widget: BrowsePageNewest(),
       tab: Tab(
-        icon: Icon(Icons.delete),
+        text: "New",
       ),
     );
     _pages.add(
       widget: BrowsePageDefaults(),
       tab: Tab(
-        icon: Icon(Icons.print),
+        text: "Default",
       ),
     );
   }

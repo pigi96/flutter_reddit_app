@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redditapp/blocs/submissions/submissions_bloc.dart';
 import 'package:redditapp/blocs/submissions/submissions_event.dart';
+import 'package:redditapp/blocs/submissions/submissions_state.dart';
+import 'package:redditapp/repositories/reddit_repository.dart';
 
 import 'package:redditapp/ui/pages/helpers/page_helper.dart';
 import 'package:redditapp/ui/pages/submissions/submissions_page.dart';
+import 'package:redditapp/ui/pages/submissions/submissions_page_hot.dart';
 
 
 class SubmissionsPageController extends StatefulWidget {
@@ -26,43 +31,27 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
     _pages = Pages();
 
     _pages.add(
-      widget: SubmissionsPage(
-        dataEvent: GetHotSubmissions(
-          title: widget.title,
-        ),
+      widget: SubmissionsPageHot(
+        title: widget.title,
       ),
       tab: Tab(
-        icon: Icon(Icons.directions_bike),
+        text: "Hot",
       ),
     );
     _pages.add(
-      widget: SubmissionsPage(
-        dataEvent: GetNewestSubmissions(
-          title: widget.title,
-        ),
+      widget: SubmissionsPageHot(
+        title: widget.title,
       ),
       tab: Tab(
-        icon: Icon(Icons.directions_bus),
+        text: "New",
       ),
     );
     _pages.add(
-      widget: SubmissionsPage(
-        dataEvent: GetControversialSubmissions(
-          title: widget.title,
-        ),
+      widget: SubmissionsPageHot(
+        title: widget.title,
       ),
       tab: Tab(
-        icon: Icon(Icons.directions_boat),
-      ),
-    );
-    _pages.add(
-      widget: SubmissionsPage(
-        dataEvent: GetTopSubmissions(
-          title: widget.title,
-        ),
-      ),
-      tab: Tab(
-        icon: Icon(Icons.directions_boat),
+        text: "Top",
       ),
     );
   }
@@ -83,8 +72,33 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
             ],
           ),
         ),
-        body: TabBarView(
-          children: _pages.widgets,
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider<SubmissionsHotBloc>(
+              create: (context) => SubmissionsHotBloc(
+                redditRepository: RepositoryProvider.of<RedditRepository>(context),
+              )..add(GetHotSubmissions(
+                title: widget.title,
+              )),
+            ),
+            BlocProvider<SubmissionsNewestBloc>(
+              create: (context) => SubmissionsNewestBloc(
+                redditRepository: RepositoryProvider.of<RedditRepository>(context),
+              )..add(GetNewestSubmissions(
+                title: widget.title,
+              )),
+            ),
+            BlocProvider<SubmissionsTopBloc>(
+              create: (context) => SubmissionsTopBloc(
+                redditRepository: RepositoryProvider.of<RedditRepository>(context),
+              )..add(GetTopSubmissions(
+                title: widget.title,
+              )),
+            ),
+          ],
+          child: TabBarView(
+            children: _pages.widgets,
+          ),
         ),
       ),
     );
