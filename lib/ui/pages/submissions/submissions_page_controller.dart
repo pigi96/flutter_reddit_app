@@ -86,14 +86,14 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
               create: (context) => SubmissionsNewestBloc(
                 redditRepository: RepositoryProvider.of<RedditRepository>(context),
               )..add(GetNewestSubmissions(
-                title: widget.subreddit.fullname,
+                title: widget.subreddit.displayName,
               )),
             ),
             BlocProvider<SubmissionsTopBloc>(
               create: (context) => SubmissionsTopBloc(
                 redditRepository: RepositoryProvider.of<RedditRepository>(context),
               )..add(GetTopSubmissions(
-                title: widget.subreddit.fullname,
+                title: widget.subreddit.displayName,
               )),
             ),
           ],

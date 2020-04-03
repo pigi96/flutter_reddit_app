@@ -11,9 +11,13 @@ import 'package:redditapp/ui/widgets/submissions_card_widget.dart';
 
 class SubmissionsPage extends StatefulWidget {
   final SubmissionsState submissionsState;
+  final SubmissionsBloc submissionsBloc;
+  final SubmissionsEvent submissionsEvent;
 
   SubmissionsPage({
     @required this.submissionsState,
+    @required this.submissionsBloc,
+    @required this.submissionsEvent,
   });
 
   @override
@@ -23,22 +27,27 @@ class SubmissionsPage extends StatefulWidget {
 class _SubmissionsPageState extends State<SubmissionsPage> {
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
+  ScrollController _scrollController =
+      ScrollController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _scrollController.addListener(() {
+
+    });
+  }
 
   void _onRefresh() async{
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
+    widget.submissionsBloc.add(RefreshSubmissions());
+    widget.submissionsBloc.add(widget.submissionsEvent);
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async{
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    if(mounted)
-      setState(() {
-
-      });
+  void _onLoading() async {
+    widget.submissionsBloc.add(widget.submissionsEvent);
     _refreshController.loadComplete();
   }
 
@@ -48,6 +57,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
       return LoadingWidget();
     } else if (widget.submissionsState is Submissions) {
       final List<Submission> submissions = widget.submissionsState.submissions;
+      print(submissions.length);
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
@@ -79,17 +89,15 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
-        child: ListView(
-          children: List.generate(
-            submissions.length,
-            (index) {
-              return SubmissionsCardWidget(
-                submission: widget.submissionsState.submissions[index],
-              );
-            },
+        child: ListView.builder(
+          itemCount: submissions.length,
+          itemBuilder: (context, index) {
+            return SubmissionsCardWidget(
+              submission: widget.submissionsState.submissions[index],
+            );
+          },
           ),
-        ),
-      );
+        );
     } else {
       return Container();
     }

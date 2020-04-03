@@ -38,7 +38,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           return previous != current;
         },
         builder: (context, state) {
-          print(state);
           if (state is Authenticated) {
             BlocProvider.of<NavigationBloc>(context).add(NavigateToHome());
             return LoadingWidget();

@@ -73,6 +73,7 @@ class RedditAPI {
     Uri url = _reddit.auth.url([
       "identity",
       "read",
+      "vote",
     ], Config.identifier);
     return url;
   }
@@ -107,7 +108,6 @@ class RedditAPI {
     await for (final value in stream) {
       subreddits.add(value);
     }
-    print("PATH: ${subreddits[1].displayName}");
 
     return subreddits;
   }
@@ -119,27 +119,31 @@ class RedditAPI {
   Future<List<Submission>> subredditsSubmissions({
     @required String subredditTitle,
     @required SubmissionOption option,
-    @required var group,
+    @required String after,
   }) async {
-    print(subredditTitle);
     Stream stream;
     switch (option) {
       case SubmissionOption.newest:
-        stream = _reddit.subreddit(subredditTitle).newest(limit: 30);
+        stream = _reddit.subreddit(subredditTitle).newest(limit: 10,
+        after: after,
+        );
         break;
       case SubmissionOption.hot:
         stream = _reddit.subreddit(subredditTitle).hot(
-          limit: 30,
+          limit: 10,
+          after: after,
         );
         break;
       case SubmissionOption.controversial:
         stream = _reddit.subreddit(subredditTitle).controversial(
-          limit: 30,
+          limit: 10,
+          after: after,
         );
         break;
       case SubmissionOption.top:
         stream = _reddit.subreddit(subredditTitle).top(
-          limit: 30,
+          limit: 10,
+          after: after,
         );
         break;
     }
@@ -148,9 +152,24 @@ class RedditAPI {
     await for (final value in stream) {
       submissions.add(value);
     }
-    print(submissions[1]);
 
     return submissions;
+  }
+
+  void vote() {
+    //_reddit.submission(id: "asdas").sho
+  }
+
+  Future<Submission> submissions({
+    @required String id,
+  }) async {
+    SubmissionRef submissionRef = _reddit.submission(
+      id: id,
+    );
+
+    Submission submission = await submissionRef.populate();
+
+    return submission;
   }
 
   /// Returns a [List] of [Subreddit] user is subscribed to.

@@ -1,3 +1,4 @@
+import 'package:draw/draw.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -5,7 +6,7 @@ abstract class SubmissionsEvent extends Equatable {
   final String title;
 
   SubmissionsEvent({
-    @required this.title,
+    this.title,
   });
 
   @override
@@ -40,3 +41,5 @@ class GetControversialSubmissions extends SubmissionsEvent {
     title: title,
   );
 }
+
+class RefreshSubmissions extends SubmissionsEvent {}

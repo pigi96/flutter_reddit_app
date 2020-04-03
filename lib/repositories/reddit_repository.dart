@@ -45,12 +45,12 @@ class RedditRepository extends RedditRepositorySup {
   Future<List<Submission>> subredditsSubmissions({
     @required String title,
     @required SubmissionOption option,
-    @required var group,
+    @required String after,
   }) {
     return RedditAPI.instance.subredditsSubmissions(
       subredditTitle: title,
       option: option,
-      group: group,
+      after: after,
     );
   }
 
@@ -63,5 +63,12 @@ class RedditRepository extends RedditRepositorySup {
     );
   }
 
-
+  @override
+  Future<Submission> submissions({
+    @required String id,
+  }) {
+    return RedditAPI.instance.submissions(
+      id: id,
+    );
+  }
 }

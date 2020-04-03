@@ -13,7 +13,6 @@ String getTimeDiff(DateTime created) {
   final difference = dateNow.difference(dateCreated);
 
   var timeDiff = difference.inSeconds;
-  print(difference.inDays);
 
   if (timeDiff <= SECONDS_IN_MINUTE) {
     return "${difference.inSeconds}s";

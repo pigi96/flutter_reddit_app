@@ -9,8 +9,6 @@ import './bloc_submissions.dart';
 abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
   RedditRepository redditRepository;
 
-  var groupLoaded = 0;
-
   SubmissionsBloc({
       @required this.redditRepository,
   });
@@ -30,19 +28,32 @@ abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> 
       yield* _mapSubmissionsToState(event, SubmissionOption.controversial);
     } else if (event is GetTopSubmissions) {
       yield* _mapSubmissionsToState(event, SubmissionOption.top);
+    } else if (event is RefreshSubmissions) {
+      submissionsSaved.clear();
+      fullname = "";
     }
   }
 
+  // Keep list to save and call "next" on pages
+  List<Submission> submissionsSaved = List<Submission>();
+  String fullname = "";
+
   Stream<SubmissionsState> _mapSubmissionsToState(SubmissionsEvent event, SubmissionOption option) async* {
+    // call and get XY of elements starting from element fullname
     List<Submission> submissions = await redditRepository.subredditsSubmissions(
       title: event.title,
       option: option,
-      group: groupLoaded++,
+      after: fullname,
+    );
+    fullname = (submissions.length > 0) ? submissions.last.fullname : "";
+
+    submissionsSaved.addAll(submissions);
+
+    Submissions submissionsObj = Submissions(
+      submissions: submissionsSaved,
     );
 
-    yield Submissions(
-      submissions: submissions,
-    );
+    yield submissionsObj;
   }
 }
 
