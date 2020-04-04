@@ -1,22 +1,16 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:redditapp/blocs/authentication/bloc_authentication.dart';
-import 'package:redditapp/repositories/reddit_repository.dart';
-import 'package:redditapp/repositories/storage_repository.dart';
-import 'package:redditapp/storage/storage.dart';
-import 'package:redditapp/ui/pages/home.dart';
-import 'package:redditapp/ui/pages/authentication/authentication_page.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'blocs/browse/browse_bloc.dart';
-import 'blocs/browse/browse_event.dart';
-import 'blocs/navigation/navigation_bloc.dart';
+import 'NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_bloc.dart';
+import 'NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_event.dart';
+import 'NEW_ARCHITECTURE/presentation/bloc/navigation/navigation_bloc.dart';
+import 'NEW_ARCHITECTURE/presentation/pages/authentication/authentication_page.dart';
+import 'NEW_ARCHITECTURE/presentation/pages/home.dart';
+import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Storage.instance.prefs = await SharedPreferences.getInstance();
+  await di.init();
   runApp(MyApp());
 }
 
@@ -25,40 +19,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Inject all repositories into the global project, since they are required
     // to be used over a lot of different pages.
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider<RedditRepository>(
-          create: (BuildContext context) => RedditRepository(),
+        BlocProvider<NavigationBloc>(
+          create: (context) => di.sl<NavigationBloc>(),
         ),
-        RepositoryProvider<StorageRepository>(
-          create: (BuildContext context) => StorageRepository(),
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => di.sl<AuthenticationBloc>(),
         ),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<NavigationBloc>(
-            create: (context) => NavigationBloc(),
-          ),
-          BlocProvider<AuthenticationBloc>(
-            create: (context) => AuthenticationBloc(
-              redditRepository: RedditRepository(),
-              storageRepository: StorageRepository(),
-            ),
-          ),
-        ],
-        child: MaterialApp(
-          routes: {
-            "/authentication": (context) {
-              BlocProvider.of<AuthenticationBloc>(context).add(
-                  RestoreAuthentication());
-              return AuthenticationPage();
-            },
-            "/": (context) {
-              return Home();
-            },
+      child: MaterialApp(
+        routes: {
+          "/authentication": (context) {
+            print(BlocProvider.of<AuthenticationBloc>(context));
+            BlocProvider.of<AuthenticationBloc>(context).add(
+                RestoreAuthentication());
+            return AuthenticationPage();
           },
-          initialRoute: "/authentication",
-        ),
+          "/": (context) {
+            return Home();
+          },
+        },
+        initialRoute: "/authentication",
       ),
     );
   }
