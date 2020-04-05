@@ -41,11 +41,11 @@ class RedditRepositoryImpl implements RedditRepository {
 
   @override
   Future<Either<Failure, List<Submission>>> subredditsSubmissions({String title, SubmissionOption option, String after}) {
-    return subredditsSubmissions(title: title, after: after);
+    return redditDataSource.subredditsSubmissions(subredditTitle: title, after: after, option: option);
   }
 
   @override
   Future<Either<Failure, List<Subreddit>>> usersSubscriptions({SubscriptionOption option}) {
-    return usersSubscriptions(option: option);
+    return redditDataSource.usersSubscriptions(option: option);
   }
 }

@@ -37,10 +37,7 @@ Future<void> init() async {
   sl.registerFactory(() => BrowseBloc(getRedditSubreddits: sl()));
 
   // Bloc submissions
-  sl.registerFactory(() => SubmissionsHotBloc(getRedditSubredditsSubmissions: sl()));
-  sl.registerFactory(() => SubmissionsNewestBloc(getRedditSubredditsSubmissions: sl()));
-  sl.registerFactory(() => SubmissionsControversialBloc(getRedditSubredditsSubmissions: sl()));
-  sl.registerFactory(() => SubmissionsTopBloc(getRedditSubredditsSubmissions: sl()));
+  sl.registerFactory(() => SubmissionsBloc(getRedditSubredditsSubmissions: sl()));
 
   // Bloc submissions info
   sl.registerFactory(() => SubmissionsInfoBloc(redditRepository: sl()));

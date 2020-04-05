@@ -10,9 +10,9 @@ class SubmissionsInfoBloc extends Bloc<SubmissionsInfoEvent, SubmissionsInfoStat
   Submission submission;
 
   SubmissionsInfoBloc({
-    @required this.redditRepository,
+    this.redditRepository,
     @required this.submission,
-  }) : assert(redditRepository != null);
+  });
 
   @override
   SubmissionsInfoState get initialState => InitialSubmissionsInfoState(submission);

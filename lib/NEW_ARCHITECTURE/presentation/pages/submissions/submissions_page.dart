@@ -1,103 +1,96 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/bloc_submissions.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/submissions_bloc.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/submissions_event.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/submissions_state.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/loading_widget.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/submissions_card_widget.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_appbar.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_list.dart';
+import 'package:redditapp/injection_container.dart';
 
 class SubmissionsPage extends StatefulWidget {
-  final SubmissionsState submissionsState;
-  final SubmissionsBloc submissionsBloc;
-  final SubmissionsEvent submissionsEvent;
+  final Subreddit subreddit;
 
-  SubmissionsPage({
-    @required this.submissionsState,
-    @required this.submissionsBloc,
-    @required this.submissionsEvent,
-  });
+  SubmissionsPage({@required this.subreddit});
 
   @override
   _SubmissionsPageState createState() => _SubmissionsPageState();
 }
 
 class _SubmissionsPageState extends State<SubmissionsPage> {
+  SubmissionsEvent currentSubmissionsEvent;
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
-  ScrollController _scrollController =
-      ScrollController();
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
-    _scrollController.addListener(() {
-
-    });
+    currentSubmissionsEvent = GetHotSubmissions(
+      title: widget.subreddit.displayName,
+    );
   }
 
-  void _onRefresh() async{
-    widget.submissionsBloc.add(RefreshSubmissions());
-    widget.submissionsBloc.add(widget.submissionsEvent);
+  void _onRefresh(BuildContext context) async {
+    // monitor network fetch
+    // if failed,use refreshFailed()
+    BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
+    BlocProvider.of<SubmissionsBloc>(context).add(currentSubmissionsEvent);
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async {
-    widget.submissionsBloc.add(widget.submissionsEvent);
+  void _onLoading(BuildContext context) async {
+    // monitor network fetch
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    BlocProvider.of<SubmissionsBloc>(context).add(currentSubmissionsEvent);
     _refreshController.loadComplete();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.submissionsState is InitialSubmissionsState) {
-      return LoadingWidget();
-    } else if (widget.submissionsState is Submissions) {
-      final List<Submission> submissions = widget.submissionsState.submissions;
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        header: WaterDropHeader(),
-        footer: CustomFooter(
-          builder: (BuildContext context,LoadStatus mode){
-            Widget body ;
-            if(mode==LoadStatus.idle){
-              body =  Text("pull up load");
-            }
-            else if(mode==LoadStatus.loading){
-              body =  CupertinoActivityIndicator();
-            }
-            else if(mode == LoadStatus.failed){
-              body = Text("Load Failed!Click retry!");
-            }
-            else if(mode == LoadStatus.canLoading){
-              body = Text("release to load more");
-            }
-            else{
-              body = Text("No more Data");
-            }
-            return Container(
-              height: 55.0,
-              child: Center(child:body),
-            );
-          },
-        ),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: ListView.builder(
-          itemCount: submissions.length,
-          itemBuilder: (context, index) {
-            return SubmissionsCardWidget(
-              submission: widget.submissionsState.submissions[index],
-            );
-          },
-          ),
-        );
-    } else {
-      return Container();
-    }
+    return BlocProvider<SubmissionsBloc>(
+      create: (context) => sl<SubmissionsBloc>()..add(currentSubmissionsEvent),
+      child: BlocBuilder<SubmissionsBloc, SubmissionsState>(
+        builder: (context, submissionsState) {
+          currentSubmissionsEvent = submissionsState.submissionsEvent;
+          return Scaffold(
+            body: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              header: WaterDropHeader(),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus mode) {
+                  Widget body;
+                  if (mode == LoadStatus.idle) {
+                    body = Text("pull up load");
+                  } else if (mode == LoadStatus.loading) {
+                    body = CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = Text("Load Failed!Click retry!");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = Text("release to load more");
+                  } else {
+                    body = Text("No more Data");
+                  }
+                  return Container(
+                    height: 55.0,
+                    child: Center(child: body),
+                  );
+                },
+              ),
+              controller: _refreshController,
+              onRefresh: () => _onRefresh(context),
+              onLoading: () => _onLoading(context),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SubmissionsPageAppbar(widget.subreddit),
+                  SubmissionsPageList(submissionsState),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

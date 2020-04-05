@@ -25,7 +25,6 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
   @override
   Widget build(BuildContext context) {
     final SubmissionsInfoBloc bloc = SubmissionsInfoBloc(
-      redditRepository: RepositoryProvider.of<RedditRepository>(context),
       submission: widget.submission,
     );
 

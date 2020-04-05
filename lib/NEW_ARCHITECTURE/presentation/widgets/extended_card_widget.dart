@@ -3,7 +3,8 @@ import 'package:draw/draw.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_controller.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page.dart';
+
 
 class ExtendedCardWidget extends StatefulWidget {
   final Subreddit subreddit;
@@ -76,7 +77,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                     borderRadius: BorderRadius.circular(4.0)),
                 onPressed: () {
                   Route route = MaterialPageRoute(
-                    builder: (context) => SubmissionsPageController(
+                    builder: (context) => SubmissionsPage(
                       subreddit: widget.subreddit,
                     ),
                   );

@@ -6,11 +6,11 @@ import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
 import './bloc_submissions.dart';
 
-abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
+class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
   GetRedditSubredditsSubmissions getRedditSubredditsSubmissions;
 
   SubmissionsBloc({
-      @required this.getRedditSubredditsSubmissions,
+    @required this.getRedditSubredditsSubmissions,
   }) : assert(getRedditSubredditsSubmissions != null);
 
   @override
@@ -38,53 +38,24 @@ abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> 
   List<Submission> submissionsSaved = List<Submission>();
   String fullname = "";
 
-  Stream<SubmissionsState> _mapSubmissionsToState(SubmissionsEvent event, SubmissionOption option) async* {
-
+  Stream<SubmissionsState> _mapSubmissionsToState(
+      SubmissionsEvent event, SubmissionOption option) async* {
+    yield LoadingSubmissions();
     final getSubmissions = await getRedditSubredditsSubmissions(Params(
       title: event.title,
       option: option,
       after: fullname,
     ));
     yield getSubmissions.fold(
-          (failure) => null,
-          (status) {
-            submissionsSaved.addAll(status);
+      (failure) => null,
+      (submissionsReceived) {
+        submissionsSaved.addAll(submissionsReceived);
+        fullname = submissionsReceived.length > 0 ? fullname = submissionsReceived.last.fullname: "";
         return Submissions(
-          submissions: status,
+          submissions: submissionsSaved,
+          submissionsEvent: event,
         );
       },
     );
   }
-}
-
-class SubmissionsHotBloc extends SubmissionsBloc {
-  SubmissionsHotBloc({
-    getRedditSubredditsSubmissions,
-  }) : super(
-    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
-  );
-}
-
-class SubmissionsNewestBloc extends SubmissionsBloc {
-  SubmissionsNewestBloc({
-    getRedditSubredditsSubmissions,
-  }) : super(
-    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
-  );
-}
-
-class SubmissionsControversialBloc extends SubmissionsBloc {
-  SubmissionsControversialBloc({
-    getRedditSubredditsSubmissions,
-  }) : super(
-    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
-  );
-}
-
-class SubmissionsTopBloc extends SubmissionsBloc {
-  SubmissionsTopBloc({
-    getRedditSubredditsSubmissions,
-  }) : super(
-    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
-  );
 }
