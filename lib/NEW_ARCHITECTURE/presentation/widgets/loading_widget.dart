@@ -11,9 +11,9 @@ class LoadingWidget extends StatefulWidget {
 class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SpinKitWave(
-        color: AppColors.redditBlack,
+    return Center(
+      child: SpinKitWave(
+        color: Colors.orangeAccent,
         size: 42.0,
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/browse/browse_state
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/extended_card_widget.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/loading_widget.dart';
 import 'package:redditapp/injection_container.dart';
+
+import 'browse_page_appbar.dart';
+import 'browse_page_list.dart';
 
 class BrowsePage extends StatefulWidget {
   @override
@@ -21,25 +25,14 @@ class _BrowsePageState extends State<BrowsePage> {
       create: (context) => sl<BrowseBloc>()..add(GetPopularSubreddits()),
       child: BlocBuilder<BrowseBloc, BrowseState>(
         builder: (context, subredditsState) {
-          print(subredditsState);
-          BlocProvider.of<BrowseBloc>(context).add(GetPopularSubreddits());
-          if (subredditsState is InitialBrowseState) {
-            return LoadingWidget();
-          } else if (subredditsState is Subreddits) {
-            final List<Subreddit> subreddits = subredditsState.subreddits;
-            return ListView(
-              children: List.generate(
-                subreddits.length,
-                (index) {
-                  return ExtendedCardWidget(
-                    subreddit: subreddits[index],
-                  );
-                },
-              ),
-            );
-          } else {
-            return Container();
-          }
+          return Scaffold(
+            body: CustomScrollView(
+              slivers: <Widget>[
+                BrowsePageAppbar(),
+                BrowsePageList(subredditsState),
+              ],
+            ),
+          );
         },
       ),
     );

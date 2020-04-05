@@ -34,11 +34,12 @@ class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
   }
 
   Stream<BrowseState> _mapSubredditsToState(BrowseOption option) async* {
+    yield Loading();
     final getSubreddits = await getRedditSubreddits(Params(option: option));
     yield getSubreddits.fold(
       (failure) => null,
-      (status) => Subreddits(
-        subreddits: status,
+      (subredditsReceived) => Subreddits(
+        subreddits: subredditsReceived,
       ),
     );
   }

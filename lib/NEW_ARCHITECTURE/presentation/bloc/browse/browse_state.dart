@@ -2,20 +2,22 @@ import 'package:draw/draw.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
-abstract class BrowseState extends Equatable {
-  @override
-  List<Object> get props => [];
+abstract class BrowseState {
+  final List<Subreddit> subreddits;
+
+  BrowseState({
+    @required this.subreddits,
+  });
 }
 
 class InitialBrowseState extends BrowseState {}
 
 class Subreddits extends BrowseState {
-  final List<Subreddit> subreddits;
-
   Subreddits({
-    @required this.subreddits,
-  });
+    subreddits
+  }) : super(subreddits : subreddits);
+}
 
-  @override
-  List<Object> get props => [subreddits];
+class Loading extends BrowseState {
+
 }
