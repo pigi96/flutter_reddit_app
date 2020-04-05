@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         routes: {
           "/authentication": (context) {
-            print(BlocProvider.of<AuthenticationBloc>(context));
             BlocProvider.of<AuthenticationBloc>(context).add(
                 RestoreAuthentication());
             return AuthenticationPage();

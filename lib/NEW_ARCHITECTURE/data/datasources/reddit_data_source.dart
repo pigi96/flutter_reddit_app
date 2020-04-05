@@ -1,22 +1,23 @@
+import 'package:dartz/dartz.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/storage_repository.dart';
 import "package:redditapp/config.dart";
-import 'package:redditapp/reddit/reddit.dart';
-import 'package:redditapp/repositories/storage_repository.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/data/repositories/storage_repository_impl.dart';
+import 'package:redditapp/core/errors/failures.dart';
+import 'package:redditapp/helpers/credentials.dart';
 
-
-/// The [RedditAPI] class uses a singleton pattern to get initialized and
+/// The [RedditDataSource] class uses a singleton pattern to get initialized and
 /// provides access to a few methods available in [Reddit] class.
-class RedditAPI {
+class RedditDataSource {
   // Only a single instance will exist since the above class is a singleton.
   Reddit _reddit;
 
   // Create and call constructor for the single instance that is shared across
   // application.
-  RedditAPI._privateConstructor();
-  static final RedditAPI instance = RedditAPI._privateConstructor();
 
-  /// Method has to be called before [RedditAPI] is allowed to be used.
+  /// Method has to be called before [RedditDataSource] is allowed to be used.
   ///
   /// Initialize a [Reddit] instance according to locally saved stuff in
   /// [storageRepository], if the credentials contain data, restore the
@@ -24,22 +25,36 @@ class RedditAPI {
   /// flow instance.
   ///
   /// Return true if [_reddit] is restored.
-  Future<bool> restoreRedditAuthentication({
-    @required StorageRepository storageRepository,
+  Future<Either<Failure, bool>> restoreRedditAuthentication({
+    @required String credentials,
   }) async {
-    // Load cached credentials from disk, if available.
-    String credentials = await storageRepository.loadCredentials();
-
     // Check if loaded credentials exist.
     if (credentials != null && credentials.isNotEmpty) {
       // App has saved authentication data, restore instance
+      try {
+        _reddit = Reddit.restoreInstalledAuthenticatedInstance(credentials,
+            userAgent: Config.identifier,
+            clientId: Config.clientId,
+            redirectUri: Uri.parse(Config.redirectUri));
 
-      _reddit = Reddit.restoreInstalledAuthenticatedInstance(credentials,
-          userAgent: Config.identifier,
-          clientId: Config.clientId,
-          redirectUri: Uri.parse(Config.redirectUri));
+        await _reddit.user.friends().catchError((onError) {
+          _reddit = Reddit.createInstalledFlowInstance(
+              userAgent: Config.identifier,
+              clientId: Config.clientId,
+              redirectUri: Uri.parse(Config.redirectUri));
+          return Left(Authorization());
+        });
+      } catch (error) {
+        // App has data, but user has denied access in reddit settings or
+        // no internet network available
+        _reddit = Reddit.createInstalledFlowInstance(
+            userAgent: Config.identifier,
+            clientId: Config.clientId,
+            redirectUri: Uri.parse(Config.redirectUri));
+        return Left(Authorization());
+      }
 
-      return true;
+      return Right(true);
     }
 
     // App has no data, create a new instance
@@ -47,35 +62,32 @@ class RedditAPI {
         userAgent: Config.identifier,
         clientId: Config.clientId,
         redirectUri: Uri.parse(Config.redirectUri));
-    return false;
+    _reddit.auth.authorize("ASD");
+    return Right(false);
   }
 
   /// Return true if user with secret [code] was successfully authenticated.
-  Future<bool> authenticateUser({
-    @required StorageRepository storageRepository,
+  Future<Either<Failure, String>> authenticateUser({
     @required String code,
   }) async {
     try {
       await _reddit.auth.authorize(code);
-
     } catch (error) {
-      return false;
+      return Left(Authorization());
     }
 
-    // Write credentials to disk.
-    await storageRepository.saveCredentials(_reddit.auth.credentials.toJson());
-
-    return true;
+    return Right(_reddit.auth.credentials.toJson());
   }
 
   /// Return [Uri] using already instantiated [reddit].
-  Uri authenticationUrl() {
+  Future<Either<Failure, String>> authenticationUrl() async {
     Uri url = _reddit.auth.url([
       "identity",
       "read",
       "vote",
     ], Config.identifier);
-    return url;
+
+    return Right(url.toString());
   }
 
   Future<Redditor> redditor() async {
@@ -85,7 +97,7 @@ class RedditAPI {
   /// Returns a [List] of [Subreddit].
   ///
   /// Create a [Stream] that listens to data according to given [option].
-  Future<List<Subreddit>> subreddits({
+  Future<Either<Failure, List<Subreddit>>> subreddits({
     @required BrowseOption option,
   }) async {
     Stream stream;
@@ -109,14 +121,14 @@ class RedditAPI {
       subreddits.add(value);
     }
 
-    return subreddits;
+    return Right(subreddits);
   }
 
   /// Returns a [List] of [Submission].
   ///
   /// Create a [Stream] that listens to data according to given [option] and
   /// search for [subredditTitle] as it's reddit subreddit topic.
-  Future<List<Submission>> subredditsSubmissions({
+  Future<Either<Failure, List<Submission>>> subredditsSubmissions({
     @required String subredditTitle,
     @required SubmissionOption option,
     @required String after,
@@ -125,7 +137,7 @@ class RedditAPI {
     switch (option) {
       case SubmissionOption.newest:
         stream = _reddit.subreddit(subredditTitle).newest(limit: 10,
-        after: after,
+          after: after,
         );
         break;
       case SubmissionOption.hot:
@@ -153,14 +165,10 @@ class RedditAPI {
       submissions.add(value);
     }
 
-    return submissions;
+    return Right(submissions);
   }
 
-  void vote() {
-    //_reddit.submission(id: "asdas").sho
-  }
-
-  Future<Submission> submissions({
+  Future<Either<Failure, Submission>> submission({
     @required String id,
   }) async {
     SubmissionRef submissionRef = _reddit.submission(
@@ -169,14 +177,14 @@ class RedditAPI {
 
     Submission submission = await submissionRef.populate();
 
-    return submission;
+    return Right(submission);
   }
 
   /// Returns a [List] of [Subreddit] user is subscribed to.
   ///
   /// Create a [Stream] that listens to data according to given [option] and
   /// search for currently authorized user's [List] of subscribed [Subreddit].
-  Future<List<Subreddit>> usersSubscriptions({
+  Future<Either<Failure, List<Subreddit>>> usersSubscriptions({
     @required SubscriptionOption option,
   }) async {
     Stream stream;
@@ -197,6 +205,6 @@ class RedditAPI {
       subreddits.add(value);
     }
 
-    return subreddits;
+    return Right(subreddits);
   }
 }

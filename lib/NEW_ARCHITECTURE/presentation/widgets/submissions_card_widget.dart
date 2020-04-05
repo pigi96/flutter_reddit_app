@@ -34,7 +34,6 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
       child: BlocBuilder<SubmissionsInfoBloc, SubmissionsInfoState>(
         bloc: bloc,
         builder: (context, submissionInfo) {
-          print("REBUILD");
           return Card(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

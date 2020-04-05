@@ -56,7 +56,6 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
       return LoadingWidget();
     } else if (widget.submissionsState is Submissions) {
       final List<Submission> submissions = widget.submissionsState.submissions;
-      print(submissions.length);
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,

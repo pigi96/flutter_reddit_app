@@ -1,13 +1,13 @@
+import 'package:dartz/dartz.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/datasources/reddit_data_source.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
-
 import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/reddit_repository.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/storage_repository.dart';
+import 'package:redditapp/core/errors/failures.dart';
 
 
-class RedditRepositoryImpl extends RedditRepository {
+class RedditRepositoryImpl implements RedditRepository {
   final RedditDataSource redditDataSource;
 
   RedditRepositoryImpl({
@@ -15,65 +15,37 @@ class RedditRepositoryImpl extends RedditRepository {
   });
 
   @override
-  Future<bool> authenticateUser({
-    @required String code,
-  }) {
-    return redditDataSource.authenticateUser(
-      code: code,
-    );
+  Future<Either<Failure, Submission>> submission({String id}) {
+    return redditDataSource.submission(id: id);
   }
 
   @override
-  Future<bool> restoreRedditAuthentication() {
-    return redditDataSource.restoreRedditAuthentication();
+  Future<Either<Failure, String>> authenticateUser({String code}) {
+    return redditDataSource.authenticateUser(code: code);
   }
 
   @override
-  String authenticationUrl() => redditDataSource.authenticationUrl().toString();
-
-  @override
-  Future<List<Subreddit>> subreddits({
-    @required BrowseOption option,
-  }) {
-    return redditDataSource.subreddits(
-      option: option,
-    );
+  Future<Either<Failure, String>> authenticationUrl() async {
+    return await redditDataSource.authenticationUrl();
   }
 
   @override
-  Future<List<Submission>> subredditsSubmissions({
-    @required String title,
-    @required SubmissionOption option,
-    @required String after,
-  }) {
-    return redditDataSource.subredditsSubmissions(
-      subredditTitle: title,
-      option: option,
-      after: after,
-    );
+  Future<Either<Failure, bool>> restoreRedditAuthentication({String credentials}) {
+    return redditDataSource.restoreRedditAuthentication(credentials: credentials);
   }
 
   @override
-  Future<List<Subreddit>> usersSubscriptions({
-    @required SubscriptionOption option,
-  }) {
-    return redditDataSource.usersSubscriptions(
-      option: option,
-    );
+  Future<Either<Failure, List<Subreddit>>> subreddits({BrowseOption option}) {
+    return redditDataSource.subreddits(option: option);
   }
 
   @override
-  Future<Submission> submissions({
-    @required String id,
-  }) {
-    return redditDataSource.submissions(
-      id: id,
-    );
+  Future<Either<Failure, List<Submission>>> subredditsSubmissions({String title, SubmissionOption option, String after}) {
+    return subredditsSubmissions(title: title, after: after);
   }
 
   @override
-  Future<Redditor> redditor() {
-    // TODO: implement redditor
-    return null;
+  Future<Either<Failure, List<Subreddit>>> usersSubscriptions({SubscriptionOption option}) {
+    return usersSubscriptions(option: option);
   }
 }

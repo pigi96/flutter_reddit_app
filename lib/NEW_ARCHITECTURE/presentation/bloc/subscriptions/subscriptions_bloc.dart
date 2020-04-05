@@ -31,32 +31,32 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
   }
 
   Stream<SubscriptionsState> _mapGetDefaultSubscriptionsToState() async* {
-    List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
+    /*List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
       option: SubscriptionOption.defaults,
-    );
+    );*/
 
     yield DefaultSubscriptions(
-      subreddits: subreddits,
+      //subreddits: subreddits,
     );
   }
 
   Stream<SubscriptionsState> _mapGetContributorSubscriptionsToState() async* {
-    List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
+    /*List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
       option: SubscriptionOption.contributor,
-    );
+    );*/
 
     yield ContributorSubscriptions(
-      subreddits: subreddits,
+      //subreddits: subreddits,
     );
   }
 
   Stream<SubscriptionsState> _mapGetModeratorSubscriptionsToState() async* {
-    List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
+    /*List<Subreddit> subreddits = await redditRepository.usersSubscriptions(
       option: SubscriptionOption.moderator,
-    );
+    );*/
 
     yield ModeratorSubscriptions(
-      subreddits: subreddits,
+      //subreddits: subreddits,
     );
   }
 }

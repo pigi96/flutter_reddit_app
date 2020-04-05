@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authenticate_user.dart' as authUser;
-import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_restore_authentication.dart' as checkAuth;
-import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authentication_url.dart' as authUrl;
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authenticate_user.dart'
+    as authUser;
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_restore_authentication.dart'
+    as checkAuth;
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authentication_url.dart'
+    as authUrl;
 import 'package:redditapp/core/use_cases/use_case.dart';
 
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   checkAuth.RedditRestoreAuthentication redditRestoreAuthentication;
   authUser.RedditAuthenticateUser redditAuthenticateUser;
   authUrl.RedditAuthenticationUrl redditAuthenticationUrl;
@@ -16,8 +20,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   AuthenticationBloc({
     @required this.redditRestoreAuthentication,
     @required this.redditAuthenticateUser,
-    @required this.redditAuthenticationUrl, redditRepository, storageRepository,
-  }) : assert(redditRestoreAuthentication != null && redditAuthenticateUser != null && redditAuthenticationUrl != null);
+    @required this.redditAuthenticationUrl,
+  }) : assert(redditRestoreAuthentication != null &&
+            redditAuthenticateUser != null &&
+            redditAuthenticationUrl != null);
 
   @override
   AuthenticationState get initialState => NotAuthenticated();
@@ -40,37 +46,36 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     yield LoadingAuthentication();
 
     final authenticated = await redditRestoreAuthentication(NoParams());
-    yield authenticated.fold(
-        (failure) => NotAuthenticated(),
-        (status) {
-          return status ? Authenticated():
-            NotAuthenticated();
-        },
+    final yi = authenticated.fold(
+      (failure) => NotAuthenticated(),
+      (status) {
+        return status ? Authenticated() : NotAuthenticated();
+      },
     );
+
+    yield yi;
   }
 
   Stream<AuthenticationState> _mapAuthenticateUserToState(
       AuthenticateUser event) async* {
     yield LoadingAuthentication();
-
-    final authenticated = await redditAuthenticateUser(authUser.Params(code: event.code));
+    final authenticated =
+        await redditAuthenticateUser(authUser.Params(code: event.code));
     yield authenticated.fold(
-        (failure) => NotAuthenticated(),
-        (status) {
-          return status ? Authenticated():
-            NotAuthenticated();
-        },
+      (failure) => NotAuthenticated(),
+      (status) {
+        return Authenticated();
+      },
     );
   }
 
   Stream<AuthenticationState> _mapStartAuthenticationToState() async* {
     final authenticationUrl = await redditAuthenticationUrl(NoParams());
-    yield authenticationUrl.fold(
-        (failure) => null,
-        (url) {
-          return StartedAuthentication(url: url);
-        }
-    );
+    yield authenticationUrl.fold((failure) {
+      return NotAuthenticated();
+    }, (url) {
+      return StartedAuthentication(url: url);
+    });
   }
 
   Stream<AuthenticationState> _mapStopAuthenticationToState() async* {

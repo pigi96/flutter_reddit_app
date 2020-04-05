@@ -3,16 +3,15 @@ import 'package:bloc/bloc.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/data/repositories/reddit_repository_impl.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/reddit_repository.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
 import './bloc_submissions.dart';
 
 abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
-  RedditRepository redditRepository;
+  GetRedditSubredditsSubmissions getRedditSubredditsSubmissions;
 
   SubmissionsBloc({
-      @required this.redditRepository,
-  }) : assert(redditRepository != null);
+      @required this.getRedditSubredditsSubmissions,
+  }) : assert(getRedditSubredditsSubmissions != null);
 
   @override
   SubmissionsState get initialState => InitialSubmissionsState();
@@ -40,52 +39,52 @@ abstract class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> 
   String fullname = "";
 
   Stream<SubmissionsState> _mapSubmissionsToState(SubmissionsEvent event, SubmissionOption option) async* {
-    // call and get XY of elements starting from element fullname
-    List<Submission> submissions = await redditRepository.subredditsSubmissions(
+
+    final getSubmissions = await getRedditSubredditsSubmissions(Params(
       title: event.title,
       option: option,
       after: fullname,
+    ));
+    yield getSubmissions.fold(
+          (failure) => null,
+          (status) {
+            submissionsSaved.addAll(status);
+        return Submissions(
+          submissions: status,
+        );
+      },
     );
-    fullname = (submissions.length > 0) ? submissions.last.fullname : "";
-
-    submissionsSaved.addAll(submissions);
-
-    Submissions submissionsObj = Submissions(
-      submissions: submissionsSaved,
-    );
-
-    yield submissionsObj;
   }
 }
 
 class SubmissionsHotBloc extends SubmissionsBloc {
   SubmissionsHotBloc({
-    redditRepository,
+    getRedditSubredditsSubmissions,
   }) : super(
-    redditRepository: redditRepository,
+    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
   );
 }
 
 class SubmissionsNewestBloc extends SubmissionsBloc {
   SubmissionsNewestBloc({
-    redditRepository,
+    getRedditSubredditsSubmissions,
   }) : super(
-    redditRepository: redditRepository,
+    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
   );
 }
 
 class SubmissionsControversialBloc extends SubmissionsBloc {
   SubmissionsControversialBloc({
-    redditRepository,
+    getRedditSubredditsSubmissions,
   }) : super(
-    redditRepository: redditRepository,
+    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
   );
 }
 
 class SubmissionsTopBloc extends SubmissionsBloc {
   SubmissionsTopBloc({
-    redditRepository,
+    getRedditSubredditsSubmissions,
   }) : super(
-    redditRepository: redditRepository,
+    getRedditSubredditsSubmissions: getRedditSubredditsSubmissions,
   );
 }

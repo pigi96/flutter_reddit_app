@@ -1,8 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/repositories/reddit_repository_impl.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/repositories/storage_repository_impl.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/usecases/reddit/reddit_authentication_url.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/usecases/reddit/reddit_restore_authentication.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_submission.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/browse/bloc_browse.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/navigation/bloc_navigation.dart';
@@ -12,7 +13,9 @@ import 'NEW_ARCHITECTURE/data/datasources/reddit_data_source.dart';
 import 'NEW_ARCHITECTURE/data/datasources/storage_data_source.dart';
 import 'NEW_ARCHITECTURE/domain/repositories/reddit_repository.dart';
 import 'NEW_ARCHITECTURE/domain/repositories/storage_repository.dart';
-import 'NEW_ARCHITECTURE/domain/usecases/reddit/reddit_authenticate_user.dart';
+import 'NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authenticate_user.dart';
+import 'NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_authentication_url.dart';
+import 'NEW_ARCHITECTURE/domain/use_cases/reddit/reddit_restore_authentication.dart';
 import 'NEW_ARCHITECTURE/presentation/bloc/submissions/submissions_bloc.dart';
 import 'NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_bloc.dart';
 
@@ -31,16 +34,13 @@ Future<void> init() async {
   sl.registerFactory(() => NavigationBloc());
 
   // Bloc browse
-  sl.registerFactory(() => BrowsePopularBloc(redditRepository: sl()));
-  sl.registerFactory(() => BrowseDefaultsBloc(redditRepository: sl()));
-  sl.registerFactory(() => BrowseGoldBloc(redditRepository: sl()));
-  sl.registerFactory(() => BrowseNewestBloc(redditRepository: sl()));
+  sl.registerFactory(() => BrowseBloc(getRedditSubreddits: sl()));
 
   // Bloc submissions
-  sl.registerFactory(() => SubmissionsHotBloc(redditRepository: sl()));
-  sl.registerFactory(() => SubmissionsNewestBloc(redditRepository: sl()));
-  sl.registerFactory(() => SubmissionsControversialBloc(redditRepository: sl()));
-  sl.registerFactory(() => SubmissionsTopBloc(redditRepository: sl()));
+  sl.registerFactory(() => SubmissionsHotBloc(getRedditSubredditsSubmissions: sl()));
+  sl.registerFactory(() => SubmissionsNewestBloc(getRedditSubredditsSubmissions: sl()));
+  sl.registerFactory(() => SubmissionsControversialBloc(getRedditSubredditsSubmissions: sl()));
+  sl.registerFactory(() => SubmissionsTopBloc(getRedditSubredditsSubmissions: sl()));
 
   // Bloc submissions info
   sl.registerFactory(() => SubmissionsInfoBloc(redditRepository: sl()));
@@ -49,9 +49,12 @@ Future<void> init() async {
   // bloc subscriptions
 
   // Use cases
-  sl.registerLazySingleton(() => RedditAuthenticateUser(sl()));
+  sl.registerLazySingleton(() => RedditAuthenticateUser(sl(), sl()));
   sl.registerLazySingleton(() => RedditAuthenticationUrl(sl()));
-  sl.registerLazySingleton(() => RedditRestoreAuthentication(sl()));
+  sl.registerLazySingleton(() => RedditRestoreAuthentication(sl(), sl()));
+  sl.registerLazySingleton(() => GetRedditSubredditsSubmissions(sl()));
+  sl.registerLazySingleton(() => GetRedditSubreddits(sl()));
+  sl.registerLazySingleton(() => GetRedditSubmission(sl()));
 
   // Repository
   sl.registerLazySingleton<RedditRepository>(() => RedditRepositoryImpl(
@@ -64,9 +67,7 @@ Future<void> init() async {
   );
 
   // Data sources
-  sl.registerLazySingleton<RedditDataSource>(() => RedditDataSource(
-      storageRepository: sl(),
-  ),);
+  sl.registerLazySingleton<RedditDataSource>(() => RedditDataSource());
   sl.registerLazySingleton<StorageDataSource>(() => StorageDataSource(
       sharedPreferences: sl(),
     ),

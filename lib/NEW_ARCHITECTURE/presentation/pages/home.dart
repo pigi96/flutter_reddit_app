@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/subscribtions/subscriptions_page_controller.dart';
 
-import 'browse/browse_page_controller.dart';
+import 'browse/browse_page.dart';
+
 import 'helpers/page_helper.dart';
 
 
@@ -27,7 +28,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
     );
 
     _pages.add(
-      widget: BrowsePageController(),
+      widget: BrowsePage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.subject),
         title: Text('Browse'),

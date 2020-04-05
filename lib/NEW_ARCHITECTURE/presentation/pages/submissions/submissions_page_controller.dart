@@ -8,6 +8,8 @@ import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/submiss
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/helpers/page_helper.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_hot.dart';
 
+import '../../../../injection_container.dart';
+
 
 class SubmissionsPageController extends StatefulWidget {
   final Subreddit subreddit;
@@ -73,23 +75,17 @@ class _SubmissionsPageControllerState extends State<SubmissionsPageController> {
         body: MultiBlocProvider(
           providers: [
             BlocProvider<SubmissionsHotBloc>(
-              create: (context) => SubmissionsHotBloc(
-                redditRepository: RepositoryProvider.of<RedditRepository>(context),
-              )..add(GetHotSubmissions(
+              create: (context) => sl<SubmissionsHotBloc>()..add(GetHotSubmissions(
                 title: widget.subreddit.displayName,
               )),
             ),
             BlocProvider<SubmissionsNewestBloc>(
-              create: (context) => SubmissionsNewestBloc(
-                redditRepository: RepositoryProvider.of<RedditRepository>(context),
-              )..add(GetNewestSubmissions(
+              create: (context) => sl<SubmissionsNewestBloc>()..add(GetNewestSubmissions(
                 title: widget.subreddit.displayName,
               )),
             ),
             BlocProvider<SubmissionsTopBloc>(
-              create: (context) => SubmissionsTopBloc(
-                redditRepository: RepositoryProvider.of<RedditRepository>(context),
-              )..add(GetTopSubmissions(
+              create: (context) => sl<SubmissionsTopBloc>()..add(GetTopSubmissions(
                 title: widget.subreddit.displayName,
               )),
             ),

@@ -1,17 +1,18 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
-import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/reddit_repository.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits.dart';
+
 import './bloc_browse.dart';
 
-abstract class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
-  RedditRepository redditRepository;
+class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
+  GetRedditSubreddits getRedditSubreddits;
 
   BrowseBloc({
-    @required this.redditRepository,
-  }) : assert(redditRepository != null);
+    @required this.getRedditSubreddits,
+  }) : assert(getRedditSubreddits != null);
 
   @override
   BrowseState get initialState => InitialBrowseState();
@@ -20,6 +21,7 @@ abstract class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
   Stream<BrowseState> mapEventToState(
     BrowseEvent event,
   ) async* {
+    print(event);
     if (event is GetPopularSubreddits) {
       yield* _mapSubredditsToState(BrowseOption.popular);
     } else if (event is GetNewestSubreddits) {
@@ -32,45 +34,12 @@ abstract class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
   }
 
   Stream<BrowseState> _mapSubredditsToState(BrowseOption option) async* {
-    print("call subreddits");
-    List<Subreddit> subreddits = await redditRepository.subreddits(
-      option: option,
-    );
-
-    yield Subreddits(
-      subreddits: subreddits,
+    final getSubreddits = await getRedditSubreddits(Params(option: option));
+    yield getSubreddits.fold(
+      (failure) => null,
+      (status) => Subreddits(
+        subreddits: status,
+      ),
     );
   }
-}
-
-class BrowsePopularBloc extends BrowseBloc {
-  BrowsePopularBloc({
-    redditRepository,
-  }) : super(
-          redditRepository: redditRepository,
-        );
-}
-
-class BrowseNewestBloc extends BrowseBloc {
-  BrowseNewestBloc({
-    redditRepository,
-  }) : super(
-          redditRepository: redditRepository,
-        );
-}
-
-class BrowseGoldBloc extends BrowseBloc {
-  BrowseGoldBloc({
-    redditRepository,
-  }) : super(
-          redditRepository: redditRepository,
-        );
-}
-
-class BrowseDefaultsBloc extends BrowseBloc {
-  BrowseDefaultsBloc({
-    redditRepository,
-  }) : super(
-          redditRepository: redditRepository,
-        );
 }

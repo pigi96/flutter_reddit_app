@@ -1,5 +1,8 @@
-abstract class StorageRepository {
-  Future<void> saveCredentials(String credentials) {}
+import 'package:dartz/dartz.dart';
+import 'package:redditapp/core/errors/failures.dart';
 
-  Future<String> loadCredentials() {}
+abstract class StorageRepository {
+  Future<Either<Failure, void>> saveCredentials(String credentials) {}
+
+  Future<Either<Failure, String>> loadCredentials() {}
 }

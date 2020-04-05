@@ -11,7 +11,7 @@ class RedditAuthenticationUrl implements UseCase<String, NoParams> {
 
   @override
   Future<Either<Failure, String>> call(NoParams params) async {
-    return Right(redditRepository.authenticationUrl());
+    return await redditRepository.authenticationUrl();
   }
 }
 

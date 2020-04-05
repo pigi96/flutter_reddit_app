@@ -1,34 +1,35 @@
+import 'package:dartz/dartz.dart';
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/data/models/reddit.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/storage_repository.dart';
+import 'package:redditapp/core/errors/failures.dart';
 
 abstract class RedditRepository {
-  Future<bool> authenticateUser({
+  Future<Either<Failure, String>> authenticateUser({
     @required String code,
   });
 
-  Future<bool> restoreRedditAuthentication();
+  Future<Either<Failure, bool>> restoreRedditAuthentication({
+    @required String credentials,
+  });
 
-  Future<Redditor> redditor();
+  Future<Either<Failure, String>> authenticationUrl();
 
-  String authenticationUrl();
-
-  Future<List<Subreddit>> subreddits({
+  Future<Either<Failure, List<Subreddit>>> subreddits({
     @required BrowseOption option,
   });
 
-  Future<List<Submission>> subredditsSubmissions({
+  Future<Either<Failure, List<Submission>>> subredditsSubmissions({
     @required String title,
     @required SubmissionOption option,
     @required String after,
   });
 
-  Future<List<Subreddit>> usersSubscriptions({
+  Future<Either<Failure, List<Subreddit>>> usersSubscriptions({
     @required SubscriptionOption option,
   });
 
-  Future<Submission> submissions({
+  Future<Either<Failure, Submission>> submission({
     @required String id,
   });
 }

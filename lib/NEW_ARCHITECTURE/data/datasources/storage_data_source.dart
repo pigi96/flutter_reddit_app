@@ -1,7 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:redditapp/core/errors/failures.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const CREDENTIALS_LOCATION = "credentials_exported_loc";
+const CREDENTIALS_LOCATION = "credentials";
 
 class StorageDataSource {
   final SharedPreferences sharedPreferences;
@@ -10,11 +12,13 @@ class StorageDataSource {
     @required this.sharedPreferences,
   });
 
-  void saveCredentials(String credentials) async {
+  Future<Either<Failure, void>> saveCredentials(String credentials) async {
     await sharedPreferences.setString(CREDENTIALS_LOCATION, credentials);
+
+    return Right((){});
   }
 
-  Future<String> loadCredentials() async {
-    return sharedPreferences.getString(CREDENTIALS_LOCATION) ?? null;
+  Future<Either<Failure, String>> loadCredentials() async {
+    return Right(sharedPreferences.getString(CREDENTIALS_LOCATION) ?? null);
   }
 }
