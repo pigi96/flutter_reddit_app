@@ -23,8 +23,15 @@ class SubmissionsCardWidget extends StatefulWidget {
 
 class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  SubmissionsInfoBloc bloc;
+  @override
   Widget build(BuildContext context) {
-    final SubmissionsInfoBloc bloc = SubmissionsInfoBloc(
+      bloc = SubmissionsInfoBloc(
       submission: widget.submission,
     );
 

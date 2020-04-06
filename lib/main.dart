@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_bloc.dart';
 import 'NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_event.dart';
@@ -10,6 +11,7 @@ import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   await di.init();
   runApp(MyApp());
 }

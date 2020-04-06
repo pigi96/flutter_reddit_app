@@ -25,8 +25,11 @@ class _SubmissionsPageAppbarState extends State<SubmissionsPageAppbar> {
       pinned: false,
       snap: false,
       floating: true,
+      backgroundColor: Colors.grey[900],
       flexibleSpace: FlexibleSpaceBar(
-        title: Text('Demo'),
+        title: Text(
+            widget.subreddit.title,
+        ),
       ),
       actions: <Widget>[
         IconButton(

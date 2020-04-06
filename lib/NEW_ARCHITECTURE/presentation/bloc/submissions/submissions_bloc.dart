@@ -40,7 +40,6 @@ class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
 
   Stream<SubmissionsState> _mapSubmissionsToState(
       SubmissionsEvent event, SubmissionOption option) async* {
-    yield LoadingSubmissions();
     final getSubmissions = await getRedditSubredditsSubmissions(Params(
       title: event.title,
       option: option,

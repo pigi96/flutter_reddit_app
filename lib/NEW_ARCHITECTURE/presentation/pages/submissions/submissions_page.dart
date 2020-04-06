@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/bloc_submissions.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/submissions_bloc.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_appbar.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_cover.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page_list.dart';
 import 'package:redditapp/injection_container.dart';
 
@@ -36,14 +37,14 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
     // if failed,use refreshFailed()
     BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
     BlocProvider.of<SubmissionsBloc>(context).add(currentSubmissionsEvent);
-    _refreshController.refreshCompleted();
+   
   }
 
   void _onLoading(BuildContext context) async {
     // monitor network fetch
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     BlocProvider.of<SubmissionsBloc>(context).add(currentSubmissionsEvent);
-    _refreshController.loadComplete();
+
   }
 
   @override
@@ -53,11 +54,15 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
       child: BlocBuilder<SubmissionsBloc, SubmissionsState>(
         builder: (context, submissionsState) {
           currentSubmissionsEvent = submissionsState.submissionsEvent;
+          _refreshController.refreshCompleted();
+          _refreshController.loadComplete();
           return Scaffold(
             body: SmartRefresher(
               enablePullDown: true,
               enablePullUp: true,
-              header: WaterDropHeader(),
+              header: WaterDropMaterialHeader(
+                backgroundColor: Colors.orange,
+              ),
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus mode) {
                   Widget body;
@@ -83,6 +88,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
               onLoading: () => _onLoading(context),
               child: CustomScrollView(
                 slivers: <Widget>[
+                  SubmissionsPageCover(widget.subreddit),
                   SubmissionsPageAppbar(widget.subreddit),
                   SubmissionsPageList(submissionsState),
                 ],
