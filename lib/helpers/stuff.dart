@@ -9,5 +9,4 @@ String checkForUrl(List<SubmissionPreview> submissionPreview) {
 SubmissionPreview checkIfImageExists(List<SubmissionPreview> submissionPreview) {
   String url = "";
   if (submissionPreview.length > 0) return submissionPreview[0];
-
 }

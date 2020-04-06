@@ -88,7 +88,7 @@ class _SubmissionsPageState extends State<SubmissionsPage> {
               onLoading: () => _onLoading(context),
               child: CustomScrollView(
                 slivers: <Widget>[
-                  SubmissionsPageCover(widget.subreddit),
+                  //SubmissionsPageCover(widget.subreddit),
                   SubmissionsPageAppbar(widget.subreddit),
                   SubmissionsPageList(submissionsState),
                 ],
