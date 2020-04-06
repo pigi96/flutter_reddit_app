@@ -207,4 +207,15 @@ class RedditDataSource {
 
     return Right(subreddits);
   }
+
+  /// Returns a [List] of [Submission].
+  ///
+  /// Create a [Stream] that listens to data according to given [option] and
+  /// search for [subredditTitle] as it's reddit subreddit topic.
+  Future<Either<Failure, Submission>> comments({
+    @required Submission submission,
+  }) async {
+    submission.refreshComments();
+    return Right(submission);
+  }
 }

@@ -25,7 +25,7 @@ class _SubmissionsPageAppbarState extends State<SubmissionsPageAppbar> {
   Widget build(BuildContext context) {
     print(widget.subreddit);
     return SliverPersistentHeader(
-      pinned: true,
+      pinned: false,
       floating: true,
       delegate: CustomSliverDelegate(
         expandedHeight: 150,

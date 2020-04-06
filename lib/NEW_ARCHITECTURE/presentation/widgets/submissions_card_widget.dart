@@ -7,6 +7,8 @@ import 'package:redditapp/NEW_ARCHITECTURE/domain/repositories/reddit_repository
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_bloc.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_event.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_state.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/comments/comments_page.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page.dart';
 import 'package:redditapp/helpers/stuff.dart';
 import 'package:redditapp/helpers/time_converter.dart';
 
@@ -41,19 +43,32 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
         bloc: bloc,
         builder: (context, submissionInfo) {
           return Card(
+            margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Text(
-                        "${submissionInfo.submission.author} - ${getTimeDiff(submissionInfo.submission.createdUtc)}"),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0),
+                      child: Text(
+                          "u/${submissionInfo.submission.author} - ${getTimeDiff(submissionInfo.submission.createdUtc)}",
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                      ),),
+                    ),
                   ],
                 ),
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(widget.submission.title),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0, 0),
+                  child: Text(widget.submission.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                  ),),
+                ),
                 SizedBox(
                   height: 5.0,
                 ),
@@ -68,10 +83,13 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(
-                  widget.submission.selftext,
-                  maxLines: 10,
-                  overflow: TextOverflow.fade,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.submission.selftext,
+                    maxLines: 10,
+                    overflow: TextOverflow.fade,
+                  ),
                 ),
                 SizedBox(
                   height: 5.0,
@@ -105,7 +123,14 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
                               "${submissionInfo.submission.numComments} Comments"),
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Route route = MaterialPageRoute(
+                          builder: (context) => CommentsPage(
+                            submission: submissionInfo.submission,
+                          ),
+                        );
+                        Navigator.push(context, route);
+                      },
                     ),
                   ],
                 ),

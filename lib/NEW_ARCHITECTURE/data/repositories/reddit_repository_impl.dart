@@ -48,4 +48,9 @@ class RedditRepositoryImpl implements RedditRepository {
   Future<Either<Failure, List<Subreddit>>> usersSubscriptions({SubscriptionOption option}) {
     return redditDataSource.usersSubscriptions(option: option);
   }
+
+  @override
+  Future<Either<Failure, Submission>> comments({Submission submission})  {
+    return redditDataSource.comments(submission: submission);
+  }
 }

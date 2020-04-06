@@ -4,8 +4,10 @@ import 'package:redditapp/NEW_ARCHITECTURE/data/repositories/storage_repository_
 import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_submission.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/domain/use_cases/reddit/get_reddit_submission_comments.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/browse/bloc_browse.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/comments/bloc_comments.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/navigation/bloc_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +44,9 @@ Future<void> init() async {
   // Bloc submissions info
   sl.registerFactory(() => SubmissionsInfoBloc(redditRepository: sl()));
 
+  // Bloc comments
+  sl.registerFactory(() => CommentsBloc(sl()));
+
   // TODO: add subscriptions, which have yet to be fixed
   // bloc subscriptions
 
@@ -52,6 +57,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRedditSubredditsSubmissions(sl()));
   sl.registerLazySingleton(() => GetRedditSubreddits(sl()));
   sl.registerLazySingleton(() => GetRedditSubmission(sl()));
+  sl.registerLazySingleton(() => GetRedditSubmissionComments(sl()));
 
   // Repository
   sl.registerLazySingleton<RedditRepository>(() => RedditRepositoryImpl(

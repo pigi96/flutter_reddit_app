@@ -32,4 +32,8 @@ abstract class RedditRepository {
   Future<Either<Failure, Submission>> submission({
     @required String id,
   });
+
+  Future<Either<Failure, Submission>> comments({
+    @required Submission submission,
+  });
 }
