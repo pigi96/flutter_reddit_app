@@ -18,36 +18,28 @@ class _CommentsTreeState extends State<CommentsTree> {
   @override
   initState() {
     super.initState();
-    commentsList.add(Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Text("${widget.comment.author} - ${getTimeDiff(widget.comment.createdUtc)}"),
-          Text("${widget.comment.body}"),
-        ],
-      ),
-    ));
-    if (widget.comment.replies != null) {
-      var buildCommentsTree = widget.comment.replies.toList();
+      var buildCommentsTree = callToTreeList(widget.comment);
       for (Comment oneTree in buildCommentsTree) {
         commentsList.add(Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text("${oneTree.author} - ${getTimeDiff(oneTree.createdUtc)}",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 10.0,
-                ),),
-                SizedBox(height: 5.0,),
-                Text("${oneTree.body}"),
-              ],
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15.0*oneTree.depth, 10.0, 0, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text("${oneTree.author} - ${getTimeDiff(oneTree.createdUtc)}",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10.0,
+                  ),),
+                  SizedBox(height: 5.0,),
+                  Text("${oneTree.body}"),
+                ],
+              ),
             ),
           ),
         ));
-      }
     }
   }
 
@@ -55,5 +47,23 @@ class _CommentsTreeState extends State<CommentsTree> {
     return Column(
       children: commentsList,
     );
+  }
+}
+
+var listy;
+List callToTreeList(Comment comment) {
+  listy = List<dynamic>();
+  var test = List<dynamic>();
+  test.add(comment);
+  toTreeList(test);
+  return listy;
+}
+
+void toTreeList(var comments) {
+  for (var comment in comments) {
+    listy.add(comment);
+    if ((comment is! MoreComments) && (comment.replies != null)) {
+      toTreeList((comment.replies.comments));
+    }
   }
 }
