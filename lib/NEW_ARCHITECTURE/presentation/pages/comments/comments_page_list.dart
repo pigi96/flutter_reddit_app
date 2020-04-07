@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/comments/comments_state.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions/bloc_submissions.dart';
-import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/comments_widget.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/comments/comments_widget.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/loading_widget.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/widgets/submissions_card_widget.dart';
 

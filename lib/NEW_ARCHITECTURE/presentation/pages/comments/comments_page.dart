@@ -23,7 +23,7 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+    RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -52,7 +52,6 @@ class _CommentsPageState extends State<CommentsPage> {
       )),
       child: BlocBuilder<CommentsBloc, CommentsState>(
         builder: (context, commentsState) {
-
           _refreshController.refreshCompleted();
           _refreshController.loadComplete();
           return Scaffold(

@@ -23,7 +23,6 @@ class SubmissionsPageAppbar extends StatefulWidget {
 class _SubmissionsPageAppbarState extends State<SubmissionsPageAppbar> {
   @override
   Widget build(BuildContext context) {
-    print(widget.subreddit);
     return SliverPersistentHeader(
       pinned: false,
       floating: true,
@@ -48,48 +47,7 @@ class _SubmissionsPageAppbarState extends State<SubmissionsPageAppbar> {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () {
-            return AwesomeDialog(
-              context: context,
-              animType: AnimType.BOTTOMSLIDE,
-              dialogType: DialogType.INFO,
-              body: Column(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text("Hot"),
-                    onPressed: () {
-                      BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
-                      BlocProvider.of<SubmissionsBloc>(context).add(GetHotSubmissions(
-                        title: widget.subreddit.displayName,
-                      ));
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Newest"),
-                    onPressed: () {
-                      BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
-                      BlocProvider.of<SubmissionsBloc>(context).add(GetNewestSubmissions(
-                        title: widget.subreddit.displayName,
-                      ));
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Top"),
-                    onPressed: () {
-                      BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
-                      BlocProvider.of<SubmissionsBloc>(context).add(GetTopSubmissions(
-                        title: widget.subreddit.displayName,
-                      ));
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-              tittle: 'This is Ignored',
-              desc:   'This is also Ignored',
-              btnCancelOnPress: () {},
-            ).show();
+
           },
         ),
       ],
@@ -123,28 +81,27 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           SizedBox(
             height: appBarSize < kToolbarHeight ? kToolbarHeight : appBarSize,
             child: AppBar(
-              backgroundColor: Colors.green,
-              leading: DecoratedBox(
-                decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadius.all(Radius.circular(99.0)),),
-                child: IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {},
-                ),
-              ),
+              backgroundColor: Colors.blueAccent,
               elevation: 0.0,
-              flexibleSpace: CachedNetworkImage(
-                imageUrl: subreddit.mobileHeaderImage.toString(),
-                fit: BoxFit.fill,
-                width: double.infinity,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () => dialogOptions(context, subreddit),
+                ),
+              ],
+              flexibleSpace: Opacity(
+                opacity: hideTitleWhenExpanded ? 0.0 + percent : 0.0,
+                child: CachedNetworkImage(
+                  imageUrl: subreddit.mobileHeaderImage.toString(),
+                  fit: BoxFit.fill,
+                  width: double.infinity,
+                ),
               ),
               title: Opacity(
                   opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.black38, borderRadius: BorderRadius.all(Radius.circular(10.0)),),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(subreddit.path,),
-                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(subreddit.path,),
                   )),
             ),
           ),
@@ -153,43 +110,45 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
             right: 0.0,
             top: cardTopPosition > 0 ? cardTopPosition : 0,
             bottom: 0.0,
-            child: Opacity(
-              opacity: percent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30 * percent),
-                child: Card(
-                  elevation: 20.0,
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: CircleAvatar(
-                                child: ClipOval(
-                                  child: CachedNetworkImage(
-                                    imageUrl: subreddit.iconImage.toString(),
+            child: IgnorePointer(
+              child: Opacity(
+                opacity: percent,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15 * percent),
+                  child: Card(
+                    elevation: 20.0,
+                    child: Center(
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: CircleAvatar(
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: subreddit.iconImage.toString(),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(width: 5.0,),
-                            Text(subreddit.path,
-                            style: TextStyle(
-                              color: Colors.redAccent,
-                            ),),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15.0, 0, 0, 0),
-                              child: Text("Subs: ${(subscribersCount(subreddit.data["subscribers"]))}"),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(subreddit.data["public_description"]),
-                        ),
-                      ],
+                              SizedBox(width: 5.0,),
+                              Text(subreddit.path,
+                              style: TextStyle(
+                                color: Colors.redAccent,
+                              ),),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(15.0, 0, 0, 0),
+                                child: Text("Subs: ${(subscribersCount(subreddit.data["subscribers"]))}"),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(subreddit.data["public_description"]),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -211,4 +170,50 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
+
+  void dialogOptions(BuildContext context, Subreddit subreddit) {
+     AwesomeDialog(
+      context: context,
+      animType: AnimType.BOTTOMSLIDE,
+      dialogType: DialogType.INFO,
+      body: Column(
+        children: <Widget>[
+          FlatButton(
+            child: Text("Hot"),
+            onPressed: () {
+              BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
+              BlocProvider.of<SubmissionsBloc>(context).add(GetHotSubmissions(
+                title: subreddit.displayName,
+              ));
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text("Newest"),
+            onPressed: () {
+              BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
+              BlocProvider.of<SubmissionsBloc>(context).add(GetNewestSubmissions(
+                title: subreddit.displayName,
+              ));
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text("Top"),
+            onPressed: () {
+              BlocProvider.of<SubmissionsBloc>(context).add(RefreshSubmissions());
+              BlocProvider.of<SubmissionsBloc>(context).add(GetTopSubmissions(
+                title: subreddit.displayName,
+              ));
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+      tittle: 'This is Ignored',
+      desc:   'This is also Ignored',
+      btnCancelOnPress: () {},
+    ).show();
+  }
 }
+

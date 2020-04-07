@@ -31,6 +31,7 @@ class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
     } else if (event is RefreshSubmissions) {
       submissionsSaved.clear();
       fullname = "";
+      yield LoadingSubmissions();
     }
   }
 

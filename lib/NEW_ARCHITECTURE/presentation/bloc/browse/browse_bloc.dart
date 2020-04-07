@@ -21,7 +21,6 @@ class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
   Stream<BrowseState> mapEventToState(
     BrowseEvent event,
   ) async* {
-    print(event);
     if (event is GetPopularSubreddits) {
       yield* _mapSubredditsToState(BrowseOption.popular);
     } else if (event is GetNewestSubreddits) {

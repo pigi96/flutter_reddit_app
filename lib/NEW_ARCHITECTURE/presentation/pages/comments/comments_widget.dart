@@ -8,6 +8,7 @@ import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/su
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_event.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/bloc/submissions_info/submissions_info_state.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/comments/comments_page.dart';
+import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/comments/comments_tree.dart';
 import 'package:redditapp/NEW_ARCHITECTURE/presentation/pages/submissions/submissions_page.dart';
 import 'package:redditapp/helpers/stuff.dart';
 import 'package:redditapp/helpers/time_converter.dart';
@@ -25,42 +26,18 @@ class CommentsWidget extends StatefulWidget {
 
 class _CommentsWidgetState extends State<CommentsWidget> {
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  SubmissionsInfoBloc bloc;
-  @override
   Widget build(BuildContext context) {
-      /*bloc = SubmissionsInfoBloc(
-      submission: widget.submission,
-    );*/
-
+    //allInOneTest(widget.comment);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0),
           child: Card(
             margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0),
-                      child: Text(
-                          "${widget.comment.body} ",
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                      ),),
-                    ),
-                  ],
-                ),
-
-                  ],
-                ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 0.0),
+              child: CommentsTree(widget.comment),
+              ),
             ),
-          );
+    );
   }
 }
 
@@ -86,4 +63,15 @@ Icon downVoted(VoteState voteState) {
     Icons.arrow_downward,
     color: color,
   );
+}
+
+void allInOneTest(Comment comment) {
+  print("----------------------------------------");
+  print("----------------------------------------");
+  print("----------------------------------------");
+  if (comment.replies != null) {
+    for(int i = 0; i < comment.replies.toList().length; i++) {
+      print((comment.replies.toList()[i] as Comment));
+    }
+  }
 }

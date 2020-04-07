@@ -18,8 +18,9 @@ class _BrowsePageAppbarState extends State<BrowsePageAppbar> {
       snap: false,
       floating: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text('Demo'),
+        title: Text('RedDito'),
       ),
+      backgroundColor: Colors.blueAccent,
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.search),

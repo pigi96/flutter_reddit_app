@@ -15,6 +15,8 @@ abstract class CommentsState extends Equatable {
 
 class InitialCommentsState extends CommentsState {}
 
+class LoadingComments extends CommentsState {}
+
 class LoadSubmission extends CommentsState {
   LoadSubmission({
     submission,

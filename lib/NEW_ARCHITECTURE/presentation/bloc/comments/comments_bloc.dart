@@ -17,6 +17,8 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
   ) async* {
     if (event is GetComments) {
       yield* _mapGetCommentsToState(event);
+    } else {
+      yield LoadingComments();
     }
   }
 
