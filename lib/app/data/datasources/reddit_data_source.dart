@@ -212,7 +212,7 @@ class RedditDataSource {
   Future<Either<Failure, Submission>> comments({
     @required Submission submission,
   }) async {
-    submission.refreshComments();
+    await submission.refreshComments();
     return Right(submission);
   }
 
