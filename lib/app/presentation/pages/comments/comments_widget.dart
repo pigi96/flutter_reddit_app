@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:redditapp/app/presentation/pages/comments/comments_tree.dart';
 
 class CommentsWidget extends StatefulWidget {
-  final Comment comment;
+  final comment;
 
   CommentsWidget({
     this.comment,

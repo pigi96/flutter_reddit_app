@@ -261,4 +261,12 @@ class RedditDataSource {
 
     return Right(comment);
   }
+
+  /// asd...
+  Future<Either<Failure, dynamic>> expandComments({
+    @required MoreComments moreComments,
+  }) async {
+    var response = await moreComments.submission.populate();
+    return Right(response);
+  }
 }

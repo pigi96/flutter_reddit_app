@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:redditapp/app/data/repositories/reddit_repository_impl.dart';
 import 'package:redditapp/app/data/repositories/storage_repository_impl.dart';
+import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_expand_comments.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_submission.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
@@ -30,7 +31,8 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Bloc authentication
-  sl.registerFactory(() => AuthenticationBloc(
+  sl.registerFactory(
+    () => AuthenticationBloc(
       redditRestoreAuthentication: sl(),
       redditAuthenticateUser: sl(),
       redditAuthenticationUrl: sl(),
@@ -44,16 +46,28 @@ Future<void> init() async {
   sl.registerFactory(() => BrowseBloc(getRedditSubreddits: sl()));
 
   // Bloc submissions
-  sl.registerFactory(() => SubmissionsBloc(getRedditSubredditsSubmissions: sl()));
+  sl.registerFactory(
+      () => SubmissionsBloc(getRedditSubredditsSubmissions: sl()));
 
   // Bloc submissions info
-  sl.registerFactoryParam<SubmissionsInfoBloc, Submission, void>((s, v) => SubmissionsInfoBloc(redditRepository: sl(), postRedditSubmissionVote: sl(), submission: s));
+  sl.registerFactoryParam<SubmissionsInfoBloc, Submission, void>((s, v) =>
+      SubmissionsInfoBloc(
+          redditRepository: sl(),
+          postRedditSubmissionVote: sl(),
+          submission: s));
 
   // Bloc comments
   sl.registerFactory(() => CommentsBloc(sl()));
 
   // Bloc comments info
-  sl.registerFactoryParam<CommentsInfoBloc, Comment, void>((c, v) => CommentsInfoBloc(redditRepository: sl(), postRedditCommentVote: sl(), comment: c));
+  sl.registerFactoryParam<CommentsInfoBloc, Comment, MoreComments>(
+      (c, m) => CommentsInfoBloc(
+            redditRepository: sl(),
+            postRedditCommentVote: sl(),
+            getRedditExpandComments: sl(),
+            comment: c,
+            moreComments: m,
+          ));
 
   // TODO: add subscriptions, which have yet to be fixed
   // bloc subscriptions
@@ -68,20 +82,24 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRedditSubmissionComments(sl()));
   sl.registerLazySingleton(() => PostRedditCommentVote(sl()));
   sl.registerLazySingleton(() => PostRedditSubmissionVote(sl()));
+  sl.registerLazySingleton(() => GetRedditExpandComments(sl()));
 
   // Repository
-  sl.registerLazySingleton<RedditRepository>(() => RedditRepositoryImpl(
+  sl.registerLazySingleton<RedditRepository>(
+    () => RedditRepositoryImpl(
       redditDataSource: sl(),
     ),
   );
-  sl.registerLazySingleton<StorageRepository>(() => StorageRepositoryImpl(
+  sl.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(
       storageDataSource: sl(),
     ),
   );
 
   // Data sources
   sl.registerLazySingleton<RedditDataSource>(() => RedditDataSource());
-  sl.registerLazySingleton<StorageDataSource>(() => StorageDataSource(
+  sl.registerLazySingleton<StorageDataSource>(
+    () => StorageDataSource(
       sharedPreferences: sl(),
     ),
   );

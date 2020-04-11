@@ -3,7 +3,11 @@ import 'package:draw/draw.dart';
 
 abstract class CommentsInfoState {
   final Comment comment;
-  CommentsInfoState(this.comment);
+  List<dynamic> moreComments;
+
+  CommentsInfoState(this.comment, {
+    this.moreComments,
+  });
 }
 
 class InitialCommentsInfoState extends CommentsInfoState {
@@ -12,4 +16,10 @@ class InitialCommentsInfoState extends CommentsInfoState {
 
 class CommentInfo extends CommentsInfoState {
   CommentInfo(comment):super(comment);
+}
+
+class CommentsExpanded extends CommentsInfoState {
+  CommentsExpanded({
+    moreComments,
+  }):super(null, moreComments: moreComments);
 }

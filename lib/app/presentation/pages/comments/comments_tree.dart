@@ -7,7 +7,7 @@ import 'package:redditapp/helpers/time_converter.dart';
 import 'package:redditapp/injection_container.dart';
 
 class CommentsTree extends StatefulWidget {
-  final Comment comment;
+  final comment;
 
   CommentsTree(this.comment);
 
@@ -22,56 +22,73 @@ class _CommentsTreeState extends State<CommentsTree> {
   initState() {
     super.initState();
     var buildCommentsTree = callToTreeList(widget.comment);
-    for (Comment oneTree in buildCommentsTree) {
-      CommentsInfoBloc bloc = sl.get<CommentsInfoBloc>(param1: widget.comment);
-      commentsList.add(BlocBuilder<CommentsInfoBloc, CommentsInfoState>(
-        bloc: bloc,
-        builder: (context, commentState) {
-          final Comment comment = commentState.comment;
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(15.0 * oneTree.depth, 10.0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "${comment.author} - ${getTimeDiff(comment.createdUtc)}",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11.0,
+    for (var oneTree in buildCommentsTree) {
+      if (oneTree is Comment) {
+        commentsList.add(BlocBuilder<CommentsInfoBloc, CommentsInfoState>(
+          bloc: sl.get<CommentsInfoBloc>(param1: oneTree),
+          builder: (context, commentState) {
+            final comment = commentState.comment;
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Padding(
+                  padding:
+                      EdgeInsets.fromLTRB(15.0 * oneTree.depth, 10.0, 0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "${comment.author} - ${getTimeDiff(comment.createdUtc)}",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11.0,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 4.0,
-                    ),
-                    Text("${comment.body}"),
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.arrow_upward),
-                          onPressed: () {
-                            bloc.add(UpVoteComment());
-                          },
-                        ),
-                        Text(
-                            "${comment.upvotes}"),
-                        IconButton(
-                          icon: Icon(Icons.arrow_downward),
-                          onPressed: () {
-                            bloc.add(DownVoteComment());
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                      SizedBox(
+                        height: 4.0,
+                      ),
+                      Text("${comment.body}"),
+                      Row(
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.arrow_upward),
+                            onPressed: () {
+                              //bloc.add(UpVoteComment());
+                            },
+                          ),
+                          Text("${comment.upvotes}"),
+                          IconButton(
+                            icon: Icon(Icons.arrow_downward),
+                            onPressed: () {
+                              //bloc.add(DownVoteComment());
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      ));
+            );
+          },
+        ));
+      } else if (oneTree is MoreComments) {
+        final bloc = sl.get<CommentsInfoBloc>(param2: oneTree);
+        commentsList.add(
+          BlocBuilder<CommentsInfoBloc, CommentsInfoState>(
+            bloc: bloc,
+            builder: (context, moreCommentsState) {
+              print(moreCommentsState);
+              return FlatButton(
+                child: Text("${oneTree.count} more replies"),
+                onPressed: () {
+                  bloc.add(LoadMoreComments());
+                },
+              );
+            },
+          ),
+        );
+      }
     }
   }
 
@@ -83,7 +100,7 @@ class _CommentsTreeState extends State<CommentsTree> {
 }
 
 var listy;
-List callToTreeList(Comment comment) {
+List callToTreeList(var comment) {
   listy = List<dynamic>();
   var test = List<dynamic>();
   test.add(comment);

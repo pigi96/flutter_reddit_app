@@ -67,4 +67,10 @@ class RedditRepositoryImpl implements RedditRepository {
   }) {
     return redditDataSource.commentVote(comment: comment, option: option);
   }
+
+  Future<Either<Failure, dynamic>> expandComments({
+    @required MoreComments moreComments,
+  }) {
+    return redditDataSource.expandComments(moreComments: moreComments);
+  }
 }

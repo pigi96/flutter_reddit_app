@@ -2,10 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/app/presentation/bloc/comments/comments_state.dart';
-import 'package:redditapp/app/presentation/bloc/submissions/bloc_submissions.dart';
 import 'package:redditapp/app/presentation/pages/comments/comments_widget.dart';
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
-import 'package:redditapp/app/presentation/widgets/submissions_card_widget.dart';
 
 class CommentsPageList extends StatefulWidget {
   final CommentsState commentsState;

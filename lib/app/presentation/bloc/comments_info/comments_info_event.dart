@@ -4,3 +4,4 @@ abstract class CommentsInfoEvent {}
 
 class UpVoteComment extends CommentsInfoEvent {}
 class DownVoteComment extends CommentsInfoEvent {}
+class LoadMoreComments extends CommentsInfoEvent {}

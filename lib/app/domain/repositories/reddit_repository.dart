@@ -46,4 +46,8 @@ abstract class RedditRepository {
     @required Comment comment,
     @required VoteOption option,
   });
+
+  Future<Either<Failure, dynamic>> expandComments({
+    @required MoreComments moreComments,
+  });
 }
