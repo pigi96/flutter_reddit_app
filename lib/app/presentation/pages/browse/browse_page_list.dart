@@ -2,7 +2,7 @@ import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/app/presentation/bloc/browse/browse_state.dart';
-import 'package:redditapp/app/presentation/widgets/extended_card_widget.dart';
+import 'package:redditapp/app/presentation/pages/browse/extended_card_widget.dart';
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
 
 class BrowsePageList extends StatefulWidget {

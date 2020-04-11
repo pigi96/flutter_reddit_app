@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draw/draw.dart';
@@ -27,7 +28,7 @@ class _SubmissionsPageAppbarState extends State<SubmissionsPageAppbar> {
       pinned: false,
       floating: true,
       delegate: CustomSliverDelegate(
-        expandedHeight: 150,
+        expandedHeight: 140,
         subreddit: widget.subreddit,
       ),
     );
@@ -144,8 +145,8 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(subreddit.data["public_description"]),
+                            padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0),
+                            child: AutoSizeText(subreddit.data["public_description"], maxLines: 4, overflow: TextOverflow.ellipsis,),
                           ),
                         ],
                       ),

@@ -23,12 +23,14 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: ExpansionTileCard(
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: CachedNetworkImage(
-            imageUrl: widget.subreddit.iconImage.toString(),
-            placeholder: (context, url) => CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+        leading: ClipOval(
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: CachedNetworkImage(
+              imageUrl: widget.subreddit.iconImage.toString(),
+              placeholder: (context, url) => Icon(Icons.child_care, size: 35.0,),
+              errorWidget: (context, url, error) => Icon(Icons.child_care, size: 35.0,),
+            ),
           ),
         ),
         title: Text(widget.subreddit.title),
@@ -45,7 +47,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 horizontal: 16.0,
                 vertical: 8.0,
               ),
-              child: Text(widget.subreddit.title,
+              child: Text("${widget.subreddit.data["public_description"]}",
                 style: Theme.of(context)
                     .textTheme
                     .body1
@@ -61,20 +63,6 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
               FlatButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4.0)),
-                onPressed: () {},
-                child: Column(
-                  children: <Widget>[
-                    Icon(Icons.star),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                    ),
-                    Text('Subscribe'),
-                  ],
-                ),
-              ),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0)),
                 onPressed: () {
                   Route route = MaterialPageRoute(
                     builder: (context) => SubmissionsPage(
@@ -85,25 +73,11 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 },
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.open_in_browser),
+                    Icon(Icons.add),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2.0),
                     ),
                     Text('Open In App'),
-                  ],
-                ),
-              ),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0)),
-                onPressed: () {},
-                child: Column(
-                  children: <Widget>[
-                    Icon(Icons.add_to_home_screen),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                    ),
-                    Text('Open In Webpage'),
                   ],
                 ),
               ),

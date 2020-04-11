@@ -8,6 +8,7 @@ import 'package:redditapp/app/presentation/bloc/submissions_info/submissions_inf
 import 'package:redditapp/app/presentation/bloc/submissions_info/submissions_info_event.dart';
 import 'package:redditapp/app/presentation/bloc/submissions_info/submissions_info_state.dart';
 import 'package:redditapp/app/presentation/pages/comments/comments_page.dart';
+import 'package:redditapp/app/presentation/widgets/fullscreen_pic_widget.dart';
 import 'package:redditapp/helpers/stuff.dart';
 import 'package:redditapp/helpers/time_converter.dart';
 import 'package:redditapp/injection_container.dart';
@@ -67,29 +68,29 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
                   ),),
                 ),
                 SizedBox(
-                  height: 5.0,
+                  height: 10.0,
                 ),
                 GestureDetector(
                   child: CachedNetworkImage(
                     imageUrl: checkForUrl(submissionInfo.submission.preview),
-                    fit: BoxFit.fitWidth,
-                    width: double.infinity,
+                    //fit: BoxFit.fitWidth,
+                    //width: double.infinity,
                     alignment: Alignment.center,
+                    height: placeholderHeight(context, submissionInfo),
+                    width: double.infinity,
                   ),
+                  onTap: () {
+                    Route route = CupertinoPageRoute(
+                      builder: (context) => FullscreenPicWidget(
+                        submissionInfo,
+                      ),
+                    );
+                    Navigator.push(context, route);
+                  },
                 ),
+                selftext(widget.submission),
                 SizedBox(
-                  height: 5.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    widget.submission.selftext,
-                    maxLines: 10,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
+                  height: 10.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -131,6 +132,7 @@ class _SubmissionsCardWidgetState extends State<SubmissionsCardWidget> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10.0,),
               ],
             ),
           );
@@ -161,5 +163,28 @@ Icon downVoted(VoteState voteState) {
   return Icon(
     Icons.arrow_downward,
     color: color,
+  );
+}
+
+double placeholderHeight(BuildContext context, SubmissionsInfoState submissionInfo) {
+  if (submissionInfo.submission.preview.length == 0) return 0.0;
+  
+  var height = submissionInfo.submission.preview[0].source.height;
+  var width = submissionInfo.submission.preview[0].source.width;
+  var per = MediaQuery.of(context).size.width / width;
+  
+  return height * per;
+}
+
+Widget selftext(Submission submission) {
+  if (submission.selftext.length == 0) return SizedBox();
+
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      submission.selftext,
+      maxLines: 10,
+      overflow: TextOverflow.fade,
+    ),
   );
 }
