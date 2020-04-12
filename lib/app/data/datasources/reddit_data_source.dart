@@ -59,7 +59,6 @@ class RedditDataSource {
         userAgent: Config.identifier,
         clientId: Config.clientId,
         redirectUri: Uri.parse(Config.redirectUri));
-    _reddit.auth.authorize("ASD");
     return Right(false);
   }
 
@@ -82,6 +81,8 @@ class RedditDataSource {
       "identity",
       "read",
       "vote",
+      "subscribe",
+      "mysubreddits",
     ], Config.identifier);
 
     return Right(url.toString());
@@ -187,7 +188,7 @@ class RedditDataSource {
     Stream stream;
     switch (option) {
       case SubscriptionOption.defaults:
-        stream = _reddit.user.subreddits();
+        stream = _reddit.user.subreddits(limit: 25);
         break;
       case SubscriptionOption.contributor:
         stream = _reddit.user.contributorSubreddits();
