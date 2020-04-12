@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:redditapp/app/presentation/pages/subscribtions/subscriptions_page_controller.dart';
+import 'package:redditapp/app/presentation/pages/subscribtions/subscriptions_page.dart';
 
 import 'browse/browse_page.dart';
 
@@ -35,7 +35,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
       ),
     );
     _pages.add(
-      widget: SubscriptionsPageController(),
+      widget: SubscriptionsPage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.subscriptions),
         title: Text('Subs'),

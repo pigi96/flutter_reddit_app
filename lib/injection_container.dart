@@ -6,12 +6,14 @@ import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_submission.dart
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_submission_comments.dart';
+import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subscriptions.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_comment_vote.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_submission_vote.dart';
 import 'package:redditapp/app/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/browse/bloc_browse.dart';
 import 'package:redditapp/app/presentation/bloc/comments/bloc_comments.dart';
 import 'package:redditapp/app/presentation/bloc/navigation/bloc_navigation.dart';
+import 'package:redditapp/app/presentation/bloc/subscriptions/bloc_subscriptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/data/datasources/reddit_data_source.dart';
@@ -69,8 +71,11 @@ Future<void> init() async {
             moreComments: m,
           ));
 
-  // TODO: add subscriptions, which have yet to be fixed
-  // bloc subscriptions
+  // Bloc subscriptions
+  sl.registerFactory(() => SubscriptionsBloc(
+    redditRepository: sl(),
+    getRedditSubscriptions: sl(),
+  ));
 
   // Use cases
   sl.registerLazySingleton(() => RedditAuthenticateUser(sl(), sl()));
@@ -83,6 +88,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => PostRedditCommentVote(sl()));
   sl.registerLazySingleton(() => PostRedditSubmissionVote(sl()));
   sl.registerLazySingleton(() => GetRedditExpandComments(sl()));
+  sl.registerLazySingleton(() => GetRedditSubscriptions(sl()));
 
   // Repository
   sl.registerLazySingleton<RedditRepository>(

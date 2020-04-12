@@ -14,24 +14,8 @@ abstract class SubscriptionsState extends Equatable {
 
 class InitialSubscriptionsState extends SubscriptionsState {}
 
-class DefaultSubscriptions extends SubscriptionsState {
-  DefaultSubscriptions({
-    subreddits,
-  }): super(
-    subreddits: subreddits,
-  );
-}
-
-class ContributorSubscriptions extends SubscriptionsState {
-  ContributorSubscriptions({
-    subreddits,
-  }): super(
-    subreddits: subreddits,
-  );
-}
-
-class ModeratorSubscriptions extends SubscriptionsState {
-  ModeratorSubscriptions({
+class Subscriptions extends SubscriptionsState {
+  Subscriptions({
     subreddits,
   }): super(
     subreddits: subreddits,

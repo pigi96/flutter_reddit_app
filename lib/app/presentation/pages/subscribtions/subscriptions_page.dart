@@ -4,7 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions/subscriptions_event.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions/subscriptions_state.dart';
+import 'package:redditapp/app/presentation/pages/subscribtions/subscriptions_page_appbar.dart';
+import 'package:redditapp/app/presentation/pages/subscribtions/subscriptions_page_list.dart';
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
+
+import '../../../../injection_container.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   final SubscriptionsEvent dataEvent;
@@ -20,25 +24,20 @@ class SubscriptionsPage extends StatefulWidget {
 class _SubscriptionsPageState extends State<SubscriptionsPage> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SubscriptionsBloc>(context).add(widget.dataEvent);
-
-    return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
-      builder: (context, subscriptions) {
-        if (subscriptions is InitialSubscriptionsState) {
-          return LoadingWidget();
-        } else {
-          return GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(subscriptions.subreddits.length, (index) {
-              return GestureDetector(
-                child: Card(
-                  child: Text(subscriptions.subreddits[index].title),
-                ),
-              );
-            }),
+    return BlocProvider<SubscriptionsBloc>(
+      create: (context) => sl<SubscriptionsBloc>()..add(GetDefaultSubscriptions()),
+      child: BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
+        builder: (context, subscriptionsState) {
+          return Scaffold(
+            body: CustomScrollView(
+              slivers: <Widget>[
+                SubscriptionsPageAppbar(),
+                SubscriptionsPageList(subscriptionsState),
+              ],
+            ),
           );
-        }
-      }
+        },
+      ),
     );
   }
 }
