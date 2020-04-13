@@ -73,4 +73,11 @@ class RedditRepositoryImpl implements RedditRepository {
   }) {
     return redditDataSource.expandComments(moreComments: moreComments);
   }
+
+  Future<Either<Failure, bool>> subSubreddit({
+    @required Subreddit subreddit,
+    @required SubscribeOption option,
+  }) {
+    return redditDataSource.subSubreddit(subreddit: subreddit, option: option);
+  }
 }

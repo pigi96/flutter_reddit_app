@@ -1,10 +1,13 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:redditapp/app/presentation/bloc/browse/browse_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions/subscriptions_state.dart';
-import 'package:redditapp/app/presentation/pages/browse/extended_card_widget.dart';
+import 'package:redditapp/app/presentation/bloc/subscriptions_info/bloc_subscriptions_info.dart';
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
+import 'package:redditapp/injection_container.dart';
+
+import 'extended_card_widget.dart';
 
 class SubscriptionsPageList extends StatefulWidget {
   final SubscriptionsState subscriptionsState;
@@ -25,8 +28,15 @@ class _SubscriptionsPageListState extends State<SubscriptionsPageList> {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-            return ExtendedCardWidget(
-              subreddit: subreddits[index],
+            return BlocProvider<SubscriptionsInfoBloc>(
+              create: (context) => sl<SubscriptionsInfoBloc>(),
+              child: BlocBuilder<SubscriptionsInfoBloc, SubscriptionsInfoState>(
+                builder: (context, subsriptionsInfoState) {
+                  return ExtendedCardWidget(
+                    subreddit: subreddits[index],
+                  );
+                },
+              ),
             );
           },
           childCount: widget.subscriptionsState.subreddits.length,

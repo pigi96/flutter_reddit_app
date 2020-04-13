@@ -50,4 +50,9 @@ abstract class RedditRepository {
   Future<Either<Failure, dynamic>> expandComments({
     @required MoreComments moreComments,
   });
+
+  Future<Either<Failure, bool>> subSubreddit({
+    @required Subreddit subreddit,
+    @required SubscribeOption option,
+  });
 }

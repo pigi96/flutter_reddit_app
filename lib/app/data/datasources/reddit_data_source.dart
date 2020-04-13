@@ -263,11 +263,30 @@ class RedditDataSource {
     return Right(comment);
   }
 
-  /// asd...
+  /// Expand them comments
   Future<Either<Failure, dynamic>> expandComments({
     @required MoreComments moreComments,
   }) async {
     var response = await moreComments.submission.populate();
     return Right(response);
+  }
+
+  /// Sub/unsubscribe on subreddit
+  Future<Either<Failure, bool>> subSubreddit({
+    @required Subreddit subreddit,
+    @required SubscribeOption option,
+  }) async {
+    switch (option) {
+      case SubscribeOption.sub:
+        var response = subreddit.subscribe();
+        await response;
+        return Right(true);
+      case SubscribeOption.unsub:
+        var response = subreddit.unsubscribe();
+        await response;
+        return Right(false);
+    }
+
+    return Left(null);
   }
 }
