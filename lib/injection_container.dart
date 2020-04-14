@@ -81,10 +81,12 @@ Future<void> init() async {
   ));
 
   // Bloc subscriptions info
-  sl.registerFactory(() => SubscriptionsInfoBloc(
-    redditRepository: sl(),
-    postRedditSubscribe: sl(),
-  ));
+  sl.registerFactoryParam<SubscriptionsInfoBloc, Subreddit, void>((s, v) =>
+      SubscriptionsInfoBloc(
+        redditRepository: sl(),
+        postRedditSubscribe: sl(),
+        subreddit: s,
+      ));
 
   // Use cases
   sl.registerLazySingleton(() => RedditAuthenticateUser(sl(), sl()));

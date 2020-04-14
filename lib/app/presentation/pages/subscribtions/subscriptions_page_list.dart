@@ -27,16 +27,10 @@ class _SubscriptionsPageListState extends State<SubscriptionsPageList> {
       final List<Subreddit> subreddits = widget.subscriptionsState.subreddits;
       return SliverList(
         delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
+          (BuildContext context, int index) {
             return BlocProvider<SubscriptionsInfoBloc>(
-              create: (context) => sl<SubscriptionsInfoBloc>(),
-              child: BlocBuilder<SubscriptionsInfoBloc, SubscriptionsInfoState>(
-                builder: (context, subsriptionsInfoState) {
-                  return ExtendedCardWidget(
-                    subreddit: subreddits[index],
-                  );
-                },
-              ),
+              create: (context) => sl.get<SubscriptionsInfoBloc>(param1: subreddits[index]),
+              child: ExtendedCardWidget(),
             );
           },
           childCount: widget.subscriptionsState.subreddits.length,

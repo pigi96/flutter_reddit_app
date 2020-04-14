@@ -8,16 +8,18 @@ import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_subscribe.dart
 import './bloc_subscriptions_info.dart';
 
 class SubscriptionsInfoBloc extends Bloc<SubscriptionsInfoEvent, SubscriptionsInfoState> {
-  RedditRepository redditRepository;
-  PostRedditSubscribe postRedditSubscribe;
+  final RedditRepository redditRepository;
+  final PostRedditSubscribe postRedditSubscribe;
+  Subreddit subreddit;
 
   SubscriptionsInfoBloc({
     @required this.redditRepository,
     @required this.postRedditSubscribe,
+    this.subreddit,
   });
 
   @override
-  SubscriptionsInfoState get initialState => InitialSubscriptionsInfoState();
+  SubscriptionsInfoState get initialState => Subscribed(subreddit: subreddit);
 
   @override
   Stream<SubscriptionsInfoState> mapEventToState(
@@ -29,12 +31,13 @@ class SubscriptionsInfoBloc extends Bloc<SubscriptionsInfoEvent, SubscriptionsIn
   }
 
   Stream<SubscriptionsInfoState> _mapSubscribeToState(Subscribe event) async* {
-    Subreddit subreddit = event.subreddit;
-    final response = await postRedditSubscribe(Params(subreddit: subreddit, option: SubscribeOption.unsub));
-    yield* response.fold(
+    final response = await postRedditSubscribe(Params(subreddit: event.subreddit, option: SubscribeOption.unsub));
+    yield response.fold(
         (failure) => null,
-        (reponseReceived) {
-          return null;
+        (subredditReceived) {
+          return Subscribed(
+            subreddit: subredditReceived,
+          );
         },
     );
   }

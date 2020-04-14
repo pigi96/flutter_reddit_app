@@ -7,13 +7,13 @@ import 'package:redditapp/app/domain/repositories/reddit_repository.dart';
 import 'package:redditapp/core/errors/failures.dart';
 import 'package:redditapp/core/use_cases/use_case.dart';
 
-class PostRedditSubscribe implements UseCase<bool, Params> {
+class PostRedditSubscribe implements UseCase<Subreddit, Params> {
   final RedditRepository redditRepository;
 
   PostRedditSubscribe(this.redditRepository);
 
   @override
-  Future<Either<Failure, bool>> call(Params params) async {
+  Future<Either<Failure, Subreddit>> call(Params params) async {
     return redditRepository.subSubreddit(subreddit: params.subreddit, option: params.option);
   }
 }

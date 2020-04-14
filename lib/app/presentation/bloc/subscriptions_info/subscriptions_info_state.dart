@@ -1,19 +1,14 @@
-import 'package:meta/meta.dart';
+import 'package:draw/draw.dart';
 
-@immutable
 abstract class SubscriptionsInfoState {
-  bool subscribed;
-  SubscriptionsInfoState({this.subscribed});
-}
-
-class InitialSubscriptionsInfoState extends SubscriptionsInfoState {
-  InitialSubscriptionsInfoState({
-    subscribed,
-  }):super(subscribed: subscribed);
+  final Subreddit subreddit;
+  SubscriptionsInfoState({
+    this.subreddit,
+  });
 }
 
 class Subscribed extends SubscriptionsInfoState {
   Subscribed({
-    subscribed,
-  }) : super(subscribed: subscribed);
+    subreddit,
+  }) : super(subreddit: subreddit);
 }

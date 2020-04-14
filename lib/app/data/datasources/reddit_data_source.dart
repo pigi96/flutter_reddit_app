@@ -272,21 +272,18 @@ class RedditDataSource {
   }
 
   /// Sub/unsubscribe on subreddit
-  Future<Either<Failure, bool>> subSubreddit({
+  Future<Either<Failure, Subreddit>> subSubreddit({
     @required Subreddit subreddit,
     @required SubscribeOption option,
   }) async {
-    switch (option) {
-      case SubscribeOption.sub:
-        var response = subreddit.subscribe();
-        await response;
-        return Right(true);
-      case SubscribeOption.unsub:
-        var response = subreddit.unsubscribe();
-        await response;
-        return Right(false);
+    if (subreddit.data["user_is_subscriber"]) {
+      await subreddit.unsubscribe();
+      subreddit.data["user_is_subscriber"] = false;
+    } else {
+      await subreddit.subscribe();
+      subreddit.data["user_is_subscriber"] = true;
     }
 
-    return Left(null);
+    return Right(subreddit);
   }
 }

@@ -74,7 +74,7 @@ class RedditRepositoryImpl implements RedditRepository {
     return redditDataSource.expandComments(moreComments: moreComments);
   }
 
-  Future<Either<Failure, bool>> subSubreddit({
+  Future<Either<Failure, Subreddit>> subSubreddit({
     @required Subreddit subreddit,
     @required SubscribeOption option,
   }) {
