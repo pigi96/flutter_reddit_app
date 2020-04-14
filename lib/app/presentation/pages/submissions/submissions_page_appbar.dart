@@ -10,6 +10,7 @@ import 'package:redditapp/app/presentation/bloc/browse/browse_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/submissions/submissions_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/submissions/submissions_event.dart';
 import 'package:redditapp/app/presentation/bloc/submissions/submissions_state.dart';
+import 'package:redditapp/app_style/app_colors.dart';
 import 'package:redditapp/helpers/text_editor.dart';
 
 class SubmissionsPageAppbar extends StatefulWidget {
@@ -82,7 +83,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           SizedBox(
             height: appBarSize < kToolbarHeight ? kToolbarHeight : appBarSize,
             child: AppBar(
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: AppColors.redditOrange,
               elevation: 0.0,
               actions: <Widget>[
                 IconButton(
@@ -126,9 +127,20 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
                                   child: ClipOval(
                                     child: CachedNetworkImage(
                                       imageUrl: subreddit.iconImage.toString(),
+                                      placeholder: (context, url) => Icon(
+                                        Icons.ac_unit,
+                                        size: 35.0,
+                                        color: AppColors.redditBlueLight,
+                                      ),
+                                      errorWidget: (context, url, error) => Icon(
+                                        Icons.ac_unit,
+                                        size: 35.0,
+                                        color: AppColors.redditBlueDark,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -146,7 +158,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 15.0),
-                            child: AutoSizeText(subreddit.data["public_description"], maxLines: 4, overflow: TextOverflow.ellipsis,),
+                            child: AutoSizeText(description(subreddit), maxLines: 4, overflow: TextOverflow.ellipsis,),
                           ),
                         ],
                       ),
@@ -218,3 +230,10 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+String description(Subreddit subreddit) {
+  String desc = subreddit.data["public_description"];
+  if (desc.length == 0) {
+    desc = subreddit.title;
+  }
+  return desc;
+}

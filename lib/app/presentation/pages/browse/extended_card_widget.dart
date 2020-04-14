@@ -4,6 +4,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_event.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_state.dart';
@@ -30,12 +31,12 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 child: CachedNetworkImage(
                   imageUrl: subreddit.iconImage.toString(),
                   placeholder: (context, url) => Icon(
-                    Icons.child_care,
+                    Icons.ac_unit,
                     size: 35.0,
                     color: AppColors.redditBlueLight,
                   ),
                   errorWidget: (context, url, error) => Icon(
-                    Icons.child_care,
+                    Icons.ac_unit,
                     size: 35.0,
                     color: AppColors.redditBlueDark,
                   ),

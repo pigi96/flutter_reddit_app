@@ -36,6 +36,7 @@ dependencies:
   bottom_navy_bar: ^5.3.2
   equatable: ^1.1.1
   dartz: ^0.8.9
+  flutter_icons: ^1.0.0+1
   flutter_spinkit: ^4.1.2
   video_player:
   nice_button: ^0.1.7

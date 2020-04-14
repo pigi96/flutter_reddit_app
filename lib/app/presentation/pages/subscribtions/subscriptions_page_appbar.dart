@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/browse/bloc_browse.dart';
 import 'package:redditapp/app/presentation/bloc/browse/browse_bloc.dart';
+import 'package:redditapp/app_style/app_colors.dart';
 
 class SubscriptionsPageAppbar extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _SubscriptionsPageAppbarState extends State<SubscriptionsPageAppbar> {
       flexibleSpace: FlexibleSpaceBar(
         title: Text('RedDito'),
       ),
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: AppColors.redditOrange,
       actions: <Widget>[
         /*IconButton(
           icon: Icon(Icons.search),
