@@ -35,7 +35,7 @@ class _State extends State<SignIn> {
                     color: AppColors.redditWhite,
                   ),
                 ),
-                color: AppColors.redditRedOrange,
+                color: AppColors.redditOrange,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
@@ -62,7 +62,7 @@ class _State extends State<SignIn> {
                     color: AppColors.redditWhite,
                   ),
                 ),
-                color: AppColors.redditRedOrange,
+                color: AppColors.redditOrange,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),

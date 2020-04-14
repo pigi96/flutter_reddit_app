@@ -1,9 +1,13 @@
 import 'package:draw/draw.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/browse/browse_state.dart';
+import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_bloc.dart';
 import 'package:redditapp/app/presentation/pages/browse/extended_card_widget.dart';
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
+
+import '../../../../injection_container.dart';
 
 class BrowsePageList extends StatefulWidget {
   final BrowseState browseState;
@@ -24,8 +28,9 @@ class _BrowsePageListState extends State<BrowsePageList> {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-            return ExtendedCardWidget(
-              subreddit: subreddits[index],
+            return BlocProvider<SubscriptionsInfoBloc>(
+              create: (context) => sl.get<SubscriptionsInfoBloc>(param1: subreddits[index]),
+              child: ExtendedCardWidget(),
             );
           },
           childCount: widget.browseState.subreddits.length,
