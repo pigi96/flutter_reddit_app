@@ -10,4 +10,5 @@ class ServerFailure extends Failure {}
 
 class CacheFailure extends Failure {}
 
-class Authorization extends Failure {}
+class AuthorizationFailure extends Failure {}
+class GeneralFailure extends Failure {}

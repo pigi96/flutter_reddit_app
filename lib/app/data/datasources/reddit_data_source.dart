@@ -39,7 +39,7 @@ class RedditDataSource {
               userAgent: Config.identifier,
               clientId: Config.clientId,
               redirectUri: Uri.parse(Config.redirectUri));
-          return Left(Authorization());
+          return Left(GeneralFailure());
         });
       } catch (error) {
         // App has data, but user has denied access in reddit settings or
@@ -48,7 +48,7 @@ class RedditDataSource {
             userAgent: Config.identifier,
             clientId: Config.clientId,
             redirectUri: Uri.parse(Config.redirectUri));
-        return Left(Authorization());
+        return Left(GeneralFailure());
       }
 
       return Right(true);
@@ -69,7 +69,7 @@ class RedditDataSource {
     try {
       await _reddit.auth.authorize(code);
     } catch (error) {
-      return Left(Authorization());
+      return Left(GeneralFailure());
     }
 
     return Right(_reddit.auth.credentials.toJson());
@@ -115,8 +115,13 @@ class RedditDataSource {
     }
 
     List<Subreddit> subreddits = List<Subreddit>();
-    await for (final value in stream) {
-      subreddits.add(value);
+
+    try {
+      await for (final value in stream) {
+        subreddits.add(value);
+      }
+    } catch (e) {
+      return Left(GeneralFailure());
     }
 
     return Right(subreddits);
@@ -159,8 +164,13 @@ class RedditDataSource {
     }
 
     List<Submission> submissions = List<Submission>();
-    await for (final value in stream) {
-      submissions.add(value);
+
+    try {
+      await for (final value in stream) {
+        submissions.add(value);
+      }
+    } catch (e) {
+      return Left(GeneralFailure());
     }
 
     return Right(submissions);
@@ -173,9 +183,12 @@ class RedditDataSource {
       id: id,
     );
 
-    Submission submission = await submissionRef.populate();
-
-    return Right(submission);
+    try {
+      Submission submission = await submissionRef.populate();
+      return Right(submission);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
   }
 
   /// Returns a [List] of [Subreddit] user is subscribed to.
@@ -199,8 +212,13 @@ class RedditDataSource {
     }
 
     List<Subreddit> subreddits = List<Subreddit>();
-    await for(final value in stream) {
-      subreddits.add(value);
+
+    try {
+      await for (final value in stream) {
+        subreddits.add(value);
+      }
+    } catch (e) {
+      return Left(GeneralFailure());
     }
 
     return Right(subreddits);
@@ -213,7 +231,13 @@ class RedditDataSource {
   Future<Either<Failure, Submission>> comments({
     @required Submission submission,
   }) async {
-    await submission.refreshComments();
+
+    try {
+      await submission.refreshComments();
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+
     return Right(submission);
   }
 
@@ -235,7 +259,11 @@ class RedditDataSource {
         break;
     }
 
-    await response;
+    try {
+      await response;
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
 
     return Right(submission);
   }
@@ -258,7 +286,11 @@ class RedditDataSource {
         break;
     }
 
-    await response;
+    try {
+      await response;
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
 
     return Right(comment);
   }
@@ -276,12 +308,16 @@ class RedditDataSource {
     @required Subreddit subreddit,
     @required SubscribeOption option,
   }) async {
-    if (subreddit.data["user_is_subscriber"]) {
-      await subreddit.unsubscribe();
-      subreddit.data["user_is_subscriber"] = false;
-    } else {
-      await subreddit.subscribe();
-      subreddit.data["user_is_subscriber"] = true;
+    try {
+      if (subreddit.data["user_is_subscriber"]) {
+        await subreddit.unsubscribe();
+        subreddit.data["user_is_subscriber"] = false;
+      } else {
+        await subreddit.subscribe();
+        subreddit.data["user_is_subscriber"] = true;
+      }
+    } catch (e) {
+      return Left(GeneralFailure());
     }
 
     return Right(subreddit);

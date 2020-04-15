@@ -22,7 +22,7 @@ class _SubscriptionsPageListState extends State<SubscriptionsPageList> {
   @override
   Widget build(BuildContext context) {
     if (widget.subscriptionsState is InitialSubscriptionsState) {
-      return SliverToBoxAdapter(child: LoadingWidget());
+      return SliverFillRemaining(child: LoadingWidget());
     } else if (widget.subscriptionsState is Subscriptions) {
       final List<Subreddit> subreddits = widget.subscriptionsState.subreddits;
       return SliverList(
@@ -37,7 +37,7 @@ class _SubscriptionsPageListState extends State<SubscriptionsPageList> {
         ),
       );
     } else {
-      return SliverToBoxAdapter(
+      return SliverFillRemaining(
         child: LoadingWidget(),
       );
     }

@@ -10,6 +10,7 @@ import 'package:redditapp/app/presentation/pages/authentication/sign_in_widget.d
 import 'package:redditapp/app/presentation/widgets/loading_widget.dart';
 
 import 'package:redditapp/app/presentation/widgets/error_widget.dart';
+import 'package:redditapp/core/errors/failures.dart';
 
 
 import 'internal_web_widget.dart';
@@ -54,7 +55,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               url: (state.url),
             );
           }
-          return ErrorContainer();
+          return ErrorContainer(GeneralFailure());
         },
       ),
     );

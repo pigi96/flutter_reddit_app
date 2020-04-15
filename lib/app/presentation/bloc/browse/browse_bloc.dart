@@ -36,7 +36,9 @@ class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
     yield Loading();
     final getSubreddits = await getRedditSubreddits(Params(option: option));
     yield getSubreddits.fold(
-      (failure) => null,
+      (failure) => ErrorState(
+        failure: failure,
+      ),
       (subredditsReceived) => Subreddits(
         subreddits: subredditsReceived,
       ),

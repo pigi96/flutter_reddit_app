@@ -24,7 +24,7 @@ class _BrowsePageAppbarState extends State<BrowsePageAppbar> {
       backgroundColor: AppColors.redditOrange,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.filter_list),
+          icon: Icon(Icons.menu),
           onPressed: () {
             return AwesomeDialog(
               context: context,
