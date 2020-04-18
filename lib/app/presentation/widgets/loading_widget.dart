@@ -12,8 +12,8 @@ class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SpinKitWave(
-        color: Colors.orangeAccent,
+      child: SpinKitRotatingCircle(
+        color: AppColors.redditOrange,
         size: 42.0,
       ),
     );

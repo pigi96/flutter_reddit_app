@@ -8,6 +8,11 @@ import 'package:redditapp/core/errors/failures.dart';
 /// The [RedditDataSource] class uses a singleton pattern to get initialized and
 /// provides access to a few methods available in [Reddit] class.
 class RedditDataSource {
+  // Config settings for API
+  static const BROWSE_LIMIT = 25;
+  static const SUBSCRIPTIONS_LIMIT = 25;
+  static const SUBMISSIONS_LIMIT = 25;
+
   // Only a single instance will exist since the above class is a singleton.
   Reddit _reddit;
 
@@ -101,16 +106,16 @@ class RedditDataSource {
     Stream stream;
     switch(option) {
       case BrowseOption.newest:
-        stream = _reddit.subreddits.newest(limit: 99);
+        stream = _reddit.subreddits.newest(limit: BROWSE_LIMIT);
         break;
       case BrowseOption.popular:
-        stream = _reddit.subreddits.popular(limit: 99);
+        stream = _reddit.subreddits.popular(limit: BROWSE_LIMIT);
         break;
       case BrowseOption.gold:
-        stream = _reddit.subreddits.gold(limit: 99);
+        stream = _reddit.subreddits.gold(limit: BROWSE_LIMIT);
         break;
       default:
-        stream = _reddit.subreddits.defaults(limit: 99);
+        stream = _reddit.subreddits.defaults(limit: BROWSE_LIMIT);
         break;
     }
 
@@ -139,25 +144,26 @@ class RedditDataSource {
     Stream stream;
     switch (option) {
       case SubmissionOption.newest:
-        stream = _reddit.subreddit(subredditTitle).newest(limit: 10,
+        stream = _reddit.subreddit(subredditTitle).newest(
+          limit: SUBMISSIONS_LIMIT,
           after: after,
         );
         break;
       case SubmissionOption.hot:
         stream = _reddit.subreddit(subredditTitle).hot(
-          limit: 10,
+          limit: SUBMISSIONS_LIMIT,
           after: after,
         );
         break;
       case SubmissionOption.controversial:
         stream = _reddit.subreddit(subredditTitle).controversial(
-          limit: 10,
+          limit: SUBMISSIONS_LIMIT,
           after: after,
         );
         break;
       case SubmissionOption.top:
         stream = _reddit.subreddit(subredditTitle).top(
-          limit: 10,
+          limit: SUBMISSIONS_LIMIT,
           after: after,
         );
         break;
@@ -201,13 +207,13 @@ class RedditDataSource {
     Stream stream;
     switch (option) {
       case SubscriptionOption.defaults:
-        stream = _reddit.user.subreddits(limit: 25);
+        stream = _reddit.user.subreddits(limit: SUBSCRIPTIONS_LIMIT);
         break;
       case SubscriptionOption.contributor:
-        stream = _reddit.user.contributorSubreddits();
+        stream = _reddit.user.contributorSubreddits(limit: SUBSCRIPTIONS_LIMIT);
         break;
       case SubscriptionOption.moderator:
-        stream = _reddit.user.moderatorSubreddits();
+        stream = _reddit.user.moderatorSubreddits(limit: SUBSCRIPTIONS_LIMIT);
         break;
     }
 
