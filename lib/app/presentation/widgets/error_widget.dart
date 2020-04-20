@@ -42,7 +42,7 @@ class _ErrorWidgetState extends State<ErrorContainer> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   elevation: 2.0,
-                  color: AppColors.redditOrange,
+                  color: AppColors.redditBlueDark,
                   label: Text(
                     "Something is not a-okay!",
                     style: TextStyle(color: Colors.white),

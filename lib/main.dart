@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:redditapp/app/presentation/bloc/user/bloc_user.dart';
 import 'app/presentation/bloc/authentication/authentication_bloc.dart';
 import 'app/presentation/bloc/authentication/authentication_event.dart';
 import 'app/presentation/bloc/navigation/navigation_bloc.dart';
+import 'app/presentation/bloc/user/user_bloc.dart';
 import 'app/presentation/pages/authentication/authentication_page.dart';
 import 'app/presentation/pages/home.dart';
 import 'injection_container.dart' as di;
@@ -28,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthenticationBloc>(
           create: (context) => di.sl<AuthenticationBloc>(),
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) => di.sl<UserBloc>()..add(GetUserData()),
         ),
       ],
       child: MaterialApp(

@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:redditapp/app/data/repositories/reddit_repository_impl.dart';
 import 'package:redditapp/app/data/repositories/storage_repository_impl.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_expand_comments.dart';
+import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_redditor.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_submission.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subreddits_submissions.dart';
@@ -15,6 +16,7 @@ import 'package:redditapp/app/presentation/bloc/browse/bloc_browse.dart';
 import 'package:redditapp/app/presentation/bloc/comments/bloc_comments.dart';
 import 'package:redditapp/app/presentation/bloc/navigation/bloc_navigation.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions/bloc_subscriptions.dart';
+import 'package:redditapp/app/presentation/bloc/user/bloc_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/data/datasources/reddit_data_source.dart';
@@ -88,6 +90,10 @@ Future<void> init() async {
         subreddit: s,
       ));
 
+  sl.registerFactory(() => UserBloc(
+    getRedditRedditor: sl(),
+  ));
+
   // Use cases
   sl.registerLazySingleton(() => RedditAuthenticateUser(sl(), sl()));
   sl.registerLazySingleton(() => RedditAuthenticationUrl(sl()));
@@ -101,6 +107,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRedditExpandComments(sl()));
   sl.registerLazySingleton(() => GetRedditSubscriptions(sl()));
   sl.registerLazySingleton(() => PostRedditSubscribe(sl()));
+  sl.registerLazySingleton(() => GetRedditRedditor(sl()));
 
   // Repository
   sl.registerLazySingleton<RedditRepository>(

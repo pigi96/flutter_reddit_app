@@ -93,8 +93,21 @@ class RedditDataSource {
     return Right(url.toString());
   }
 
-  Future<Redditor> redditor() async {
-    return _reddit.user.me();
+  Future<Either<Failure, Redditor>> redditor() async {
+    try {
+      return Right(await _reddit.user.me());
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+
+  Future<Either<Failure, bool>> revokeRedditor() async {
+    try {
+      _reddit.auth.revoke();
+      _reddit = null;
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
   }
 
   /// Returns a [List] of [Subreddit].

@@ -56,7 +56,6 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                   ),
                   child: Center(
                     child: Text(description(subreddit),
-                      textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .body1

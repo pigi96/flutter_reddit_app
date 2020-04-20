@@ -9,6 +9,10 @@ abstract class RedditRepository {
     @required String code,
   });
 
+  Future<Either<Failure, Redditor>> redditor();
+
+  Future<Either<Failure, bool>> revokeRedditor();
+
   Future<Either<Failure, bool>> restoreRedditAuthentication({
     @required String credentials,
   });

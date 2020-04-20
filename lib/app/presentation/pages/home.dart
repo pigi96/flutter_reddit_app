@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redditapp/app/presentation/pages/subscribtions/subscriptions_page.dart';
+import 'package:redditapp/app/presentation/pages/user/user_page.dart';
+import 'package:redditapp/app_style/app_colors.dart';
 
 import 'browse/browse_page.dart';
 
@@ -37,7 +39,14 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
     _pages.add(
       widget: SubscriptionsPage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
-        icon: Icon(Icons.subscriptions),
+        icon: Icon(Icons.add_box),
+        title: Text('Subs'),
+      ),
+    );
+    _pages.add(
+      widget: UserPage(),
+      bottomNavigationBarItem: BottomNavigationBarItem(
+        icon: Icon(Icons.supervisor_account),
         title: Text('Subs'),
       ),
     );
@@ -63,7 +72,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
       bottomNavigationBar: BottomNavigationBar(
         items: _pages.bottomNavigationBarItems,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: AppColors.redditBlueDark,
         onTap: _onItemTapped,
       ),
     );

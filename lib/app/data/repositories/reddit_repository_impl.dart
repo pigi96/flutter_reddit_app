@@ -15,6 +15,16 @@ class RedditRepositoryImpl implements RedditRepository {
   });
 
   @override
+  Future<Either<Failure, bool>> revokeRedditor() {
+    return redditDataSource.revokeRedditor();
+  }
+
+  @override
+  Future<Either<Failure, Redditor>> redditor() {
+    return redditDataSource.redditor();
+  }
+
+  @override
   Future<Either<Failure, Submission>> submission({String id}) {
     return redditDataSource.submission(id: id);
   }

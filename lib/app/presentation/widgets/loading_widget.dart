@@ -9,6 +9,8 @@ class LoadingWidget extends StatefulWidget {
 }
 
 class _LoadingWidgetState extends State<LoadingWidget> {
+  bool _visible = true;
+
   @override
   Widget build(BuildContext context) {
     return Center(
