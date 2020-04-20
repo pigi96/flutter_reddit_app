@@ -11,6 +11,7 @@ import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subscriptions.d
 import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_comment_vote.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_submission_vote.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/post_reddit_subscribe.dart';
+import 'package:redditapp/app/domain/use_cases/reddit/revoke_redditor.dart';
 import 'package:redditapp/app/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/browse/bloc_browse.dart';
 import 'package:redditapp/app/presentation/bloc/comments/bloc_comments.dart';
@@ -92,6 +93,7 @@ Future<void> init() async {
 
   sl.registerFactory(() => UserBloc(
     getRedditRedditor: sl(),
+    revokeRedditor: sl(),
   ));
 
   // Use cases
@@ -108,6 +110,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRedditSubscriptions(sl()));
   sl.registerLazySingleton(() => PostRedditSubscribe(sl()));
   sl.registerLazySingleton(() => GetRedditRedditor(sl()));
+  sl.registerLazySingleton(() => RevokeRedditor(sl(), sl()));
 
   // Repository
   sl.registerLazySingleton<RedditRepository>(

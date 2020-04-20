@@ -15,14 +15,13 @@ class RedditAuthenticateUser implements UseCase<bool, Params> {
   @override
   Future<Either<Failure, bool>> call(Params params) async {
     final authenticateUser = await redditRepository.authenticateUser(code: params.code);
-    authenticateUser.fold(
-        (failure) => false,
+    return authenticateUser.fold(
+        (failure) => Left(GeneralFailure()),
         (status) {
-          final saveCredentials = storageRepository.saveCredentials(status);
-          return true;
+          storageRepository.saveCredentials(status);
+          return Right(true);
         },
     );
-
   }
 }
 

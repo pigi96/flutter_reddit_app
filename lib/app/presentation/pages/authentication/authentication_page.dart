@@ -43,13 +43,14 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           return previous != current;
         },
         builder: (context, state) {
+          print(state);
           if (state is Authenticated) {
             BlocProvider.of<NavigationBloc>(context).add(NavigateToHome());
-            return LoadingWidget();
+            return Scaffold(body: LoadingWidget());
           } else if (state is NotAuthenticated) {
             return SignIn();
           } else if (state is LoadingAuthentication) {
-            return LoadingWidget();
+            return Scaffold(body: LoadingWidget());
           } else if (state is StartedAuthentication) {
             return InternalWebView(
               url: (state.url),

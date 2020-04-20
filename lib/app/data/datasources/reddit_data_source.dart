@@ -103,8 +103,9 @@ class RedditDataSource {
 
   Future<Either<Failure, bool>> revokeRedditor() async {
     try {
-      _reddit.auth.revoke();
+      await _reddit.auth.revoke();
       _reddit = null;
+      return Right(true);
     } catch (e) {
       return Left(GeneralFailure());
     }
