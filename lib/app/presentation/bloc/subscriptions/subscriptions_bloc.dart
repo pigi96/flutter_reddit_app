@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:redditapp/app/data/models/reddit.dart';
 import 'package:redditapp/app/domain/repositories/reddit_repository.dart';
 import 'package:redditapp/app/domain/use_cases/reddit/get_reddit_subscriptions.dart';
+import 'package:redditapp/core/errors/failures.dart';
 
 import './bloc_subscriptions.dart';
 
@@ -32,7 +33,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
   Stream<SubscriptionsState> _mapGetDefaultSubscriptionsToState() async* {
     final response = await getRedditSubscriptions(Params(option: SubscriptionOption.defaults));
     yield response.fold(
-        (failure) => null,
+        (failure) => ErrorState(failure),
         (subscriptionsReceived) {
           return Subscriptions(
             subreddits: subscriptionsReceived,

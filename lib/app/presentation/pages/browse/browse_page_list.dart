@@ -24,7 +24,6 @@ class _BrowsePageListState extends State<BrowsePageList> {
   @override
   Widget build(BuildContext context) {
     final browseState = widget.browseState;
-    print(browseState);
     if (browseState is InitialBrowseState) {
       return SliverToBoxAdapter(child: LoadingWidget());
     } else if (browseState is Subreddits) {
@@ -42,6 +41,7 @@ class _BrowsePageListState extends State<BrowsePageList> {
         ),
       );
     } else if (browseState is ErrorState) {
+      print(browseState);
       return SliverFillRemaining(
         child: ErrorContainer(
           browseState.failure,

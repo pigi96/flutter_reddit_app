@@ -22,5 +22,10 @@ class Subscriptions extends SubscriptionsState {
   );
 }
 
+class ErrorState extends SubscriptionsState {
+  final failure;
+  ErrorState(this.failure);
+}
+
 
 
