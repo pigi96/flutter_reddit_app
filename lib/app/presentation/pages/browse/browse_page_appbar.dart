@@ -55,7 +55,7 @@ class _BrowsePageAppbarState extends State<BrowsePageAppbar> {
                   ),
                 ],
               ),
-              tittle: 'This is Ignored',
+              title: 'This is Ignored',
               desc:   'This is also Ignored',
               btnCancelOnPress: () {},
             ).show();

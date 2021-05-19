@@ -30,7 +30,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<NavigationBloc, NavigationState>(
-      condition: (previous, current) {
+      listenWhen: (previous, current) {
         return previous != current;
       },
       listener: (context, state) {
@@ -39,7 +39,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         }
       },
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        condition: (previous, current) {
+        buildWhen: (previous, current) {
           return previous != current;
         },
         builder: (context, state) {

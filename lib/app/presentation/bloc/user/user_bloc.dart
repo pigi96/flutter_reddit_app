@@ -13,7 +13,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({
     @required this.getRedditRedditor,
     @required this.revokeRedditor,
-  });
+  }) : super(null);
 
   @override
   UserState get initialState => InitialUserState();

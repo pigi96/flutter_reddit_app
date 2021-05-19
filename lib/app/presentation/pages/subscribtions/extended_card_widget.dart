@@ -51,7 +51,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                   child: Text("${subreddit.data["public_description"]}", //user_is_subscriber
                     style: Theme.of(context)
                         .textTheme
-                        .body1
+                        .bodyText2
                         .copyWith(fontSize: 16),
                   ),
                 ),

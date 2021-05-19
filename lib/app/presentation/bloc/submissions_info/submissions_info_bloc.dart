@@ -16,7 +16,7 @@ class SubmissionsInfoBloc extends Bloc<SubmissionsInfoEvent, SubmissionsInfoStat
     @required this.redditRepository,
     @required this.submission,
     @required this.postRedditSubmissionVote,
-  });
+  }) : super(null);
 
   @override
   SubmissionsInfoState get initialState => InitialSubmissionsInfoState(submission);

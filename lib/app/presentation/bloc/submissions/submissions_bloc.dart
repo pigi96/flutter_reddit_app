@@ -11,7 +11,7 @@ class SubmissionsBloc extends Bloc<SubmissionsEvent, SubmissionsState> {
 
   SubmissionsBloc({
     @required this.getRedditSubredditsSubmissions,
-  }) : assert(getRedditSubredditsSubmissions != null);
+  }) : assert(getRedditSubredditsSubmissions != null), super(null);
 
   @override
   SubmissionsState get initialState => InitialSubmissionsState();

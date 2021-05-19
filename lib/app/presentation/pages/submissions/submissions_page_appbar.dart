@@ -223,7 +223,7 @@ class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
           ),
         ],
       ),
-      tittle: 'This is Ignored',
+      title: 'This is Ignored',
       desc:   'This is also Ignored',
       btnCancelOnPress: () {},
     ).show();

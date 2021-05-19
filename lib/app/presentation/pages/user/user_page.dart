@@ -23,7 +23,7 @@ class _UserPageState extends State<UserPage> {
         backgroundColor: AppColors.redditOrange,
       ),
       body: BlocListener<NavigationBloc, NavigationState>(
-        condition: (previous, current) {
+        listenWhen: (previous, current) {
           return previous != current;
         },
         listener: (context, state) {

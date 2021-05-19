@@ -48,7 +48,7 @@ Future<void> init() async {
   );
 
   // Bloc navigation
-  sl.registerFactory(() => NavigationBloc());
+  sl.registerFactory(() => NavigationBloc(null));
 
   // Bloc browse
   sl.registerFactory(() => BrowseBloc(getRedditSubreddits: sl()));

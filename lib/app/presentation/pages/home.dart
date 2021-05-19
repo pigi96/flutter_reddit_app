@@ -33,21 +33,21 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
       widget: BrowsePage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.subject),
-        title: Text('Browse'),
+        label: 'Browse',
       ),
     );
     _pages.add(
       widget: SubscriptionsPage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.add_box),
-        title: Text('Subs'),
+        label: 'Subs',
       ),
     );
     _pages.add(
       widget: UserPage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.supervisor_account),
-        title: Text('Subs'),
+        label: 'Subs',
       ),
     );
   }

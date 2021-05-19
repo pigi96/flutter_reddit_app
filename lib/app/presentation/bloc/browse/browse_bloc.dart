@@ -12,7 +12,7 @@ class BrowseBloc extends Bloc<BrowseEvent, BrowseState> {
 
   BrowseBloc({
     @required this.getRedditSubreddits,
-  }) : assert(getRedditSubreddits != null);
+  }) : assert(getRedditSubreddits != null), super(null);
 
   @override
   BrowseState get initialState => InitialBrowseState();
