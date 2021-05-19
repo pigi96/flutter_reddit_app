@@ -6,10 +6,7 @@ import './bloc_comments.dart';
 class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
   final GetRedditSubmissionComments getRedditSubmissionComments;
 
-  CommentsBloc(this.getRedditSubmissionComments) : super(null);
-
-  @override
-  CommentsState get initialState => InitialCommentsState();
+  CommentsBloc(this.getRedditSubmissionComments) : super(InitialCommentsState());
 
   @override
   Stream<CommentsState> mapEventToState(

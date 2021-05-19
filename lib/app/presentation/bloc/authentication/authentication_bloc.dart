@@ -23,10 +23,7 @@ class AuthenticationBloc
     @required this.redditAuthenticationUrl,
   }) : assert(redditRestoreAuthentication != null &&
             redditAuthenticateUser != null &&
-            redditAuthenticationUrl != null), super(null);
-
-  @override
-  AuthenticationState get initialState => NotAuthenticated();
+            redditAuthenticationUrl != null), super(NotAuthenticated());
 
   @override
   Stream<AuthenticationState> mapEventToState(

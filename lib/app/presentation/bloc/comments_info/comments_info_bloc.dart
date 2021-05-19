@@ -21,10 +21,7 @@ class CommentsInfoBloc extends Bloc<CommentsInfoEvent, CommentsInfoState> {
     @required this.getRedditExpandComments,
     this.comment,
     this.moreComments,
-  }) : super(null);
-
-  @override
-  CommentsInfoState get initialState => InitialCommentsInfoState(comment);
+  }) : super(InitialCommentsInfoState(comment));
 
   @override
   Stream<CommentsInfoState> mapEventToState(

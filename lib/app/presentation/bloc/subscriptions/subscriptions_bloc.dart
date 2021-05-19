@@ -16,10 +16,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
   SubscriptionsBloc({
     @required this.redditRepository,
     @required this.getRedditSubscriptions,
-  }) : assert(redditRepository != null), super(null);
-
-  @override
-  SubscriptionsState get initialState => InitialSubscriptionsState();
+  }) : assert(redditRepository != null), super(InitialSubscriptionsState());
 
   @override
   Stream<SubscriptionsState> mapEventToState(

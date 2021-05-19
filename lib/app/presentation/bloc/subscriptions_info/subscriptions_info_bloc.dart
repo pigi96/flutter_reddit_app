@@ -16,10 +16,7 @@ class SubscriptionsInfoBloc extends Bloc<SubscriptionsInfoEvent, SubscriptionsIn
     @required this.redditRepository,
     @required this.postRedditSubscribe,
     this.subreddit,
-  }) : super(null);
-
-  @override
-  SubscriptionsInfoState get initialState => Subscribed(subreddit: subreddit);
+  }) : super(Subscribed(subreddit: subreddit));
 
   @override
   Stream<SubscriptionsInfoState> mapEventToState(
