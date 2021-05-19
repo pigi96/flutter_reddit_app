@@ -31,12 +31,12 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 child: CachedNetworkImage(
                   imageUrl: subreddit.iconImage.toString(),
                   placeholder: (context, url) => Icon(
-                    Icons.ac_unit,
+                    Icons.child_care,
                     size: 35.0,
                     color: AppColors.redditBlueLight,
                   ),
                   errorWidget: (context, url, error) => Icon(
-                    Icons.ac_unit,
+                    Icons.child_care,
                     size: 35.0,
                     color: AppColors.redditBlueDark,
                   ),
@@ -58,7 +58,7 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                     child: Text(description(subreddit),
                       style: Theme.of(context)
                           .textTheme
-                          .body1
+                          .bodyText2
                           .copyWith(fontSize: 16),
                     ),
                   ),

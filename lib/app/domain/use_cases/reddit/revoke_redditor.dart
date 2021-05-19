@@ -13,11 +13,15 @@ class RevokeRedditor implements UseCase<bool, NoParams> {
     this.storageRepository,
   );
 
+  // function temporary fixed until reddit API has been fixed by the owner
   @override
   Future<Either<Failure, bool>> call(NoParams params) async {
     final response = await redditRepository.revokeRedditor();
     return response.fold(
-      (failure) => Left(GeneralFailure()),
+      (failure) /*=> Left(GeneralFailure()),*/{
+          storageRepository.saveCredentials("");
+          return Right(true);
+      },
       (revokedUser) {
         if (revokedUser) {
           storageRepository.saveCredentials("");

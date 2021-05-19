@@ -68,9 +68,11 @@ class _UserPageState extends State<UserPage> {
                   ],
                 ),
               );
-            } else if (userState is RevokedUser) {
-              BlocProvider.of<NavigationBloc>(context).add(NavigateToHome());
-              return Container();
+            } else if (userState is RevokedUser || userState is ErrorState) {
+              //BlocProvider.of<NavigationBloc>(context).add(NavigateToHome());
+              BlocProvider.of<AuthenticationBloc>(context).add(
+                  RestoreAuthentication());
+              return AuthenticationPage();
             } else {
               return LoadingWidget();
             }

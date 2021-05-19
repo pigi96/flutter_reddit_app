@@ -107,6 +107,7 @@ class RedditDataSource {
       _reddit = null;
       return Right(true);
     } catch (e) {
+      print(e);
       return Left(GeneralFailure());
     }
   }

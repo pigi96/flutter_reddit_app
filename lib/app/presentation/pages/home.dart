@@ -24,6 +24,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+    print("HOME");
     _pages = new Pages();
     _pageController = PageController(
       initialPage: 0,
@@ -47,7 +48,7 @@ class _MyStatefulWidgetState extends State<Home> with SingleTickerProviderStateM
       widget: UserPage(),
       bottomNavigationBarItem: BottomNavigationBarItem(
         icon: Icon(Icons.supervisor_account),
-        label: 'Subs',
+        label: 'Profile',
       ),
     );
   }

@@ -48,7 +48,7 @@ class _State extends State<SignIn> {
               SizedBox(
                 height: 30.0,
               ),
-              RaisedButton.icon(
+              /*RaisedButton.icon(
                 onPressed: () => Navigator.pushReplacementNamed(context, "/"),
                 icon: Icon(
                   Icons.apps,
@@ -66,7 +66,7 @@ class _State extends State<SignIn> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

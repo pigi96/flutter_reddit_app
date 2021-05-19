@@ -8,6 +8,7 @@ import 'package:redditapp/app/presentation/bloc/subscriptions_info/bloc_subscrip
 import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_bloc.dart';
 import 'package:redditapp/app/presentation/bloc/subscriptions_info/subscriptions_info_event.dart';
 import 'package:redditapp/app/presentation/pages/submissions/submissions_page.dart';
+import 'package:redditapp/app_style/app_colors.dart';
 
 
 class ExtendedCardWidget extends StatefulWidget {
@@ -29,8 +30,16 @@ class _ExtendedCardWidgetState extends State<ExtendedCardWidget> {
                 backgroundColor: Colors.transparent,
                 child: CachedNetworkImage(
                   imageUrl: subreddit.iconImage.toString(),
-                  placeholder: (context, url) => Icon(Icons.child_care, size: 35.0,),
-                  errorWidget: (context, url, error) => Icon(Icons.child_care, size: 35.0,),
+                  placeholder: (context, url) => Icon(
+                    Icons.child_care,
+                    size: 35.0,
+                    color: AppColors.redditBlueLight,
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.child_care,
+                    size: 35.0,
+                    color: AppColors.redditBlueDark,
+                  ),
                 ),
               ),
             ),
